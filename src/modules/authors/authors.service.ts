@@ -2,7 +2,6 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorsDbService } from 'src/lib/authors-db-lib/authors-db-lib.service';
-import { Author } from 'src/types/author.types';
 
 @Injectable()
 export class AuthorsService {
@@ -93,7 +92,7 @@ export class AuthorsService {
         return this.authorsDbService.getAllAuthors();
     }
 
-    findOne(id: number): Author {
+    findOne(id: number) {
         const author = this.authorsDbService.getAuthorWithBooksId(id);
 
         if (!author) {
@@ -113,7 +112,7 @@ export class AuthorsService {
         return author;
     }
 
-    findByName(name: string): Author {
+    findByName(name: string) {
         this.logger.log('Finding author by name', name);
 
         const cleanName = name.trim().toLowerCase();

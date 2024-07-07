@@ -7,7 +7,6 @@ import {
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BooksDbService } from 'src/lib/books-db-lib/books-db-lib.service';
-import { Book } from 'src/types/book.types';
 import { AuthorsService } from '../authors/authors.service';
 
 /**
@@ -52,15 +51,15 @@ export class BooksService {
                 this.booksDbService.Books[this.booksDbService.Books.length - 1]
                     .id;
 
-            let newBook: Book = {
+            let newBook = {
                 id: latestId + 1,
                 ...bookData,
             };
 
             // Create the book author using author service
-            for (const author of bookData.authors as string[]) {
+            for (const author of bookData.authors) {
                 const newAuthor = this.authorsService.create({
-                    name: author,
+                    name: author.toString(),
                     books: [newBook.id],
                 });
 
@@ -71,14 +70,15 @@ export class BooksService {
                 };
             }
 
-            this.logger.log('Creating Book:', newBook);
             this.booksDbService.createBook(newBook);
+
+            this.logger.log(`${newBook.title} has been successfully created.`);
         } catch (error) {
             throw new Error(`Failed to create book ${bookData.title}`);
         }
     }
 
-    update(id: number, bookData: UpdateBookDto): Book[] {
+    update(id: number, bookData: UpdateBookDto) {
         const bookToUpdate: UpdateBookDto = this.findOne(id);
 
         if (!bookToUpdate) {
@@ -91,38 +91,36 @@ export class BooksService {
                 ...bookData,
             };
 
-            this.logger.log('Updating Book:', updatedBook);
             this.booksDbService.updateBook(updatedBook);
 
-            return this.findAll();
+            return `${bookToUpdate.title} has been successfully updated.`;
         } catch (error) {
             throw new Error(`Failed to update book ${bookData.title}`);
         }
     }
 
-    remove(id: number): Book[] {
-        const bookToRemove: Book = this.findOne(id);
+    remove(id: number) {
+        const bookToRemove = this.findOne(id);
 
         if (!bookToRemove) {
             throw new NotFoundException('Book not found');
         }
 
         try {
-            this.logger.log('Removing Book:', bookToRemove);
             this.booksDbService.deleteBook(bookToRemove);
 
-            return this.findAll();
+            return `${bookToRemove.title} has been successfully deleted.`;
         } catch (error) {
             throw new Error(`Failed to delete book ${bookToRemove.title}`);
         }
     }
 
-    findAll(): Book[] {
+    findAll() {
         return this.booksDbService.getAllBooks();
     }
 
-    findOne(id: number): Book {
-        const book: Book = this.booksDbService.getOneBookWithAuthorsId(id);
+    findOne(id: number) {
+        const book = this.booksDbService.getOneBookWithAuthorsId(id);
 
         if (!book) {
             throw new NotFoundException('Book not found');
@@ -131,8 +129,8 @@ export class BooksService {
         return book;
     }
 
-    findOneWithAuthorsName(id: number): Book {
-        const book: Book = this.booksDbService.getOneBookWithAuthorsName(id);
+    findOneWithAuthorsName(id: number) {
+        const book = this.booksDbService.getOneBookWithAuthorsName(id);
 
         if (!book) {
             throw new NotFoundException('Book not found');
@@ -141,7 +139,7 @@ export class BooksService {
         return book;
     }
 
-    findByName(title: string): Book {
+    findByName(title: string) {
         this.logger.log('Finding book by name', title);
 
         const cleanTitle: string = title.trim().toLowerCase();
