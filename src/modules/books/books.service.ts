@@ -45,7 +45,7 @@ export class BooksService {
         try {
             /**
              * Get the latest book id and increment it by 1
-             * So that if we ever delete a book, it's id will not be reused
+             * So that if we ever delete a book, generating new id will just continue from there
              */
             const latestId: number =
                 this.booksDbService.Books[this.booksDbService.Books.length - 1]
