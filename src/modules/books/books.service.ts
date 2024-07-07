@@ -35,7 +35,7 @@ export class BooksService {
      * @param {CreateBookDto} bookData - The data for the new book.
      * @return {void} No return value.
      */
-    create(bookData: CreateBookDto): void {
+    create(bookData: CreateBookDto): string {
         const existingBook = this.findByName(bookData.title);
 
         if (existingBook) {
@@ -51,9 +51,10 @@ export class BooksService {
                 this.booksDbService.Books[this.booksDbService.Books.length - 1]
                     .id;
 
-            let newBook: CreateBookDto = {
+            const newBook: CreateBookDto = {
                 id: latestId + 1,
                 ...bookData,
+                authors: [],
             };
 
             // Create the book author using author service
@@ -64,15 +65,13 @@ export class BooksService {
                 });
 
                 // Set the author id on the book
-                newBook = {
-                    ...newBook,
-                    authors: [newAuthor.id],
-                };
+                newBook.authors.push(newAuthor.id);
             }
 
             this.booksDbService.createBook(newBook);
-
             this.logger.log(`${newBook.title} has been successfully created.`);
+
+            return `${newBook.title} has been successfully created.`;
         } catch (error) {
             throw new Error(`Failed to create book ${bookData.title}`);
         }
