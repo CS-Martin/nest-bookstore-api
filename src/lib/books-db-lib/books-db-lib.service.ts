@@ -38,6 +38,7 @@ export class BooksDbService {
             const bookAuthors = book.authors.map(
                 (authorId) => this.authorsService.findOne(authorId).name,
             );
+            console.log(bookAuthors);
             return { ...book, authors: bookAuthors };
         });
     }
@@ -50,6 +51,7 @@ export class BooksDbService {
     // ! Only used for getting books and displaying it
     getOneBookWithAuthorsName(id: number) {
         const book = this.Books.find((book) => book.id === id);
+        console.log(book);
 
         if (book) {
             const bookAuthors = book.authors.map((authorId) => {

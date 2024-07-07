@@ -17,8 +17,14 @@ export class AuthorsService {
     create(authorData: CreateAuthorDto) {
         const existingAuthor = this.findByName(authorData.name);
 
+        /**
+         * Some books already has existing author
+         * So we can't create new author
+         * We can only return the existing author
+         * For the book to get its authorId and use it as reference
+         */
         if (existingAuthor) {
-            throw new ConflictException('Author already exists');
+            return existingAuthor;
         }
 
         try {
@@ -28,8 +34,9 @@ export class AuthorsService {
             };
 
             this.logger.log('Creating Author:', newAuthor);
-
             this.authorsDbService.createAuthor(newAuthor);
+
+            return newAuthor;
         } catch (error) {
             this.logger.error(
                 `Failed to create author ${authorData.name}`,
@@ -80,10 +87,8 @@ export class AuthorsService {
         return this.authorsDbService.getAllAuthors();
     }
 
-    findOne(id: number) {
-        const author = this.authorsDbService.Authors.find(
-            (author) => author.id === id,
-        );
+    findOne(id: number): Author {
+        const author = this.authorsDbService.getAuthorWithBooksId(id);
 
         if (!author) {
             throw new NotFoundException('Author not found');
@@ -92,7 +97,17 @@ export class AuthorsService {
         return author;
     }
 
-    findByName(name: string): Author | undefined {
+    findOneWithBooksName(id: number) {
+        const author = this.authorsDbService.getAuthorWithBooksName(id);
+
+        if (!author) {
+            throw new NotFoundException('Author not found');
+        }
+
+        return author;
+    }
+
+    findByName(name: string): Author {
         this.logger.log('Finding author by name', name);
 
         const cleanName = name.trim().toLowerCase();

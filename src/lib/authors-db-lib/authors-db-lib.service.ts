@@ -42,4 +42,18 @@ export class AuthorsDbService {
             return { ...author, books };
         });
     }
+
+    getAuthorWithBooksId(id: number) {
+        return this.Authors.find((author) => author.id === id);
+    }
+
+    getAuthorWithBooksName(id: number) {
+        const author = this.Authors.find((author) => author.id === id);
+        if (author) {
+            const books = author.books.map(
+                (bookId) => this.booksService.findOne(bookId).title,
+            );
+            return { ...author, books };
+        }
+    }
 }

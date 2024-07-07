@@ -8,6 +8,7 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BooksDbService } from 'src/lib/books-db-lib/books-db-lib.service';
 import { Book } from 'src/types/book.types';
+import { AuthorsService } from '../authors/authors.service';
 
 /**
  * * Service for manipulating and transforming book data into its DTO
@@ -18,12 +19,22 @@ export class BooksService {
     private logger = new Logger(BooksService.name);
 
     /**
-     * Constructor for BooksService.
+     * Constructor for the BooksService class.
      *
-     * @param booksDbService - The service for accessing the books database.
+     * @param {BooksDbService} booksDbService - The service for accessing the books database.
+     * @param {AuthorsService} authorsService - The service for accessing the authors database.
      */
-    constructor(private readonly booksDbService: BooksDbService) {}
+    constructor(
+        private readonly booksDbService: BooksDbService,
+        private readonly authorsService: AuthorsService,
+    ) {}
 
+    /**
+     * Create a new book using the provided book data.
+     *
+     * @param {CreateBookDto} bookData - The data for the new book.
+     * @return {void} No return value.
+     */
     create(bookData: CreateBookDto): void {
         const existingBook = this.findByName(bookData.title);
 
@@ -32,10 +43,26 @@ export class BooksService {
         }
 
         try {
-            const newBook: Book = {
+            const newBookId = this.booksDbService.Books.length + 1;
+
+            let newBook: Book = {
                 id: this.booksDbService.Books.length + 1,
                 ...bookData,
             };
+
+            // Create the book author using author service
+            for (const author of bookData.authors as string[]) {
+                const newAuthor = this.authorsService.create({
+                    name: author,
+                    books: [newBookId],
+                });
+
+                // Set the author id on the book
+                newBook = {
+                    ...newBook,
+                    authors: [newAuthor.id],
+                };
+            }
 
             this.logger.log('Creating Book:', newBook);
             this.booksDbService.createBook(newBook);

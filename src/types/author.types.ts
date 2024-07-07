@@ -1,5 +1,5 @@
 export type Author = {
     id?: number;
     name: string;
-    books: number[];
+    books: number[] | string[];
 };
