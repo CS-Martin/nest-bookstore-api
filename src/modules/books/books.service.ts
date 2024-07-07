@@ -47,11 +47,11 @@ export class BooksService {
              * Get the latest book id and increment it by 1
              * So that if we ever delete a book, it's id will not be reused
              */
-            const latestId =
+            const latestId: number =
                 this.booksDbService.Books[this.booksDbService.Books.length - 1]
                     .id;
 
-            let newBook = {
+            let newBook: CreateBookDto = {
                 id: latestId + 1,
                 ...bookData,
             };
@@ -78,7 +78,7 @@ export class BooksService {
         }
     }
 
-    update(id: number, bookData: UpdateBookDto) {
+    update(id: number, bookData: UpdateBookDto): string {
         const bookToUpdate: UpdateBookDto = this.findOne(id);
 
         if (!bookToUpdate) {
@@ -99,8 +99,8 @@ export class BooksService {
         }
     }
 
-    remove(id: number) {
-        const bookToRemove = this.findOne(id);
+    remove(id: number): string {
+        const bookToRemove: CreateBookDto = this.findOne(id);
 
         if (!bookToRemove) {
             throw new NotFoundException('Book not found');
@@ -119,8 +119,9 @@ export class BooksService {
         return this.booksDbService.getAllBooks();
     }
 
-    findOne(id: number) {
-        const book = this.booksDbService.getOneBookWithAuthorsId(id);
+    findOne(id: number): CreateBookDto {
+        const book: CreateBookDto =
+            this.booksDbService.getOneBookWithAuthorsId(id);
 
         if (!book) {
             throw new NotFoundException('Book not found');
@@ -129,8 +130,9 @@ export class BooksService {
         return book;
     }
 
-    findOneWithAuthorsName(id: number) {
-        const book = this.booksDbService.getOneBookWithAuthorsName(id);
+    findOneWithAuthorsName(id: number): CreateBookDto {
+        const book: CreateBookDto =
+            this.booksDbService.getOneBookWithAuthorsName(id);
 
         if (!book) {
             throw new NotFoundException('Book not found');
@@ -139,13 +141,13 @@ export class BooksService {
         return book;
     }
 
-    findByName(title: string) {
+    findByName(title: string): CreateBookDto {
         this.logger.log('Finding book by name', title);
 
         const cleanTitle: string = title.trim().toLowerCase();
 
         return this.booksDbService.Books.find(
-            (book) => book.title.toLowerCase() === cleanTitle,
+            (book: CreateBookDto) => book.title.toLowerCase() === cleanTitle,
         );
     }
 }
