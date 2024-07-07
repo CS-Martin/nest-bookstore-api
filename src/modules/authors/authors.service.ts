@@ -1,9 +1,4 @@
-import {
-    ConflictException,
-    Injectable,
-    Logger,
-    NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorsDbService } from 'src/lib/authors-db-lib/authors-db-lib.service';
@@ -12,6 +7,7 @@ import { Author } from 'src/types/author.types';
 @Injectable()
 export class AuthorsService {
     private logger = new Logger(AuthorsService.name);
+
     constructor(private readonly authorsDbService: AuthorsDbService) {}
 
     create(authorData: CreateAuthorDto) {
@@ -28,14 +24,24 @@ export class AuthorsService {
         }
 
         try {
+            /**
+             * Get the latest book id and increment it by 1
+             * So that if we ever delete a book, it's id will not be reused
+             */
+            const latestId =
+                this.authorsDbService.Authors[
+                    this.authorsDbService.Authors.length - 1
+                ].id;
+
             const newAuthor = {
-                id: this.authorsDbService.Authors.length + 1,
+                id: latestId + 1,
                 ...authorData,
             };
 
             this.logger.log('Creating Author:', newAuthor);
             this.authorsDbService.createAuthor(newAuthor);
 
+            // Return the new author with for books service to use its authorId
             return newAuthor;
         } catch (error) {
             this.logger.error(

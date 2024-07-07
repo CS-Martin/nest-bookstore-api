@@ -31,6 +31,7 @@ export class BooksService {
 
     /**
      * Create a new book using the provided book data.
+     * If the book has authors, they will be created as well.
      *
      * @param {CreateBookDto} bookData - The data for the new book.
      * @return {void} No return value.
@@ -43,10 +44,16 @@ export class BooksService {
         }
 
         try {
-            const newBookId = this.booksDbService.Books.length + 1;
+            /**
+             * Get the latest book id and increment it by 1
+             * So that if we ever delete a book, it's id will not be reused
+             */
+            const latestId =
+                this.booksDbService.Books[this.booksDbService.Books.length - 1]
+                    .id;
 
             let newBook: Book = {
-                id: this.booksDbService.Books.length + 1,
+                id: latestId + 1,
                 ...bookData,
             };
 
@@ -54,7 +61,7 @@ export class BooksService {
             for (const author of bookData.authors as string[]) {
                 const newAuthor = this.authorsService.create({
                     name: author,
-                    books: [newBookId],
+                    books: [newBook.id],
                 });
 
                 // Set the author id on the book

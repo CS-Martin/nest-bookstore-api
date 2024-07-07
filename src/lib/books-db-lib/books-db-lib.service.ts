@@ -31,6 +31,11 @@ export class BooksDbService {
 
     deleteBook(bookToDelete: Book) {
         this.Books = this.Books.filter((book) => book.id !== bookToDelete.id);
+
+        // If the book has no more authors
+        if (bookToDelete.authors.length === 0) {
+            this.authorsService.remove(bookToDelete.id);
+        }
     }
 
     getAllBooks() {
