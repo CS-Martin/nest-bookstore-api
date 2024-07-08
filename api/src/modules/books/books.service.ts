@@ -45,14 +45,15 @@ export class BooksService {
                 authors: [],
             };
 
-            // Create authors for the new book
-            newBook.authors = bookData.authors.map((author) => {
-                const newAuthor = this.authorsService.create({
-                    name: author.toString(),
-                    books: [newBook.id],
+            if (bookData.authors.length > 0) {
+                newBook.authors = bookData.authors.map((author) => {
+                    const newAuthor = this.authorsService.createAuthorForBooks(
+                        author.toString(),
+                        newBook.id,
+                    );
+                    return newAuthor.id;
                 });
-                return newAuthor.id;
-            });
+            }
 
             this.booksDbService.createBook(newBook);
             this.logger.log(`${newBook.title} has been successfully created.`);
@@ -69,15 +70,15 @@ export class BooksService {
      * @param {number} authorId - The ID of the author.
      * @param {string[]} bookTitles - The titles of the books to create.
      */
-    createBooksForAuthor(authorId: number, bookTitles: string[]): void {
-        bookTitles.forEach((title) => {
-            const newBook: CreateBookDto = {
-                id: this.getNextBookId(),
-                title,
-                authors: [authorId],
-            };
-            this.booksDbService.createBook(newBook);
-        });
+    createBooksForAuthor(authorId: number, bookTitles: string): CreateBookDto {
+        const newBook: CreateBookDto = {
+            id: this.getNextBookId(),
+            title: bookTitles,
+            authors: [authorId],
+        };
+        this.booksDbService.createBook(newBook);
+
+        return newBook;
     }
 
     /**

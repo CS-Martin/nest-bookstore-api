@@ -38,21 +38,48 @@ export class AuthorsService {
         }
 
         try {
-            const newAuthor = { id: this.getNextAuthorId(), ...authorData };
-            this.authorsDbService.createAuthor(newAuthor);
+            const newAuthor = {
+                id: this.getNextAuthorId(),
+                ...authorData,
+                books: [],
+            };
 
             // Create books for the new author if any
             if (authorData.books && authorData.books.length > 0) {
-                this.booksService.createBooksForAuthor(
-                    newAuthor.id,
-                    authorData.books.map((book) => book.toString()),
-                );
+                newAuthor.books = authorData.books.map((book) => {
+                    const newBook = this.booksService.createBooksForAuthor(
+                        newAuthor.id,
+                        book.toString(),
+                    );
+
+                    return newBook.id;
+                });
             }
 
+            this.authorsDbService.createAuthor(newAuthor);
             return newAuthor;
         } catch (error) {
             throw new Error(`Failed to create author ${authorData.name}`);
         }
+    }
+
+    /**
+     * Creates a new author for a given book.
+     *
+     * @param {string} authorName - The name of the author to create.
+     * @param {number} bookId - The ID of the book associated with the author.
+     * @returns {CreateAuthorDto} The created author.
+     */
+    createAuthorForBooks(authorName: string, bookId: number): CreateAuthorDto {
+        const newAuthor: CreateAuthorDto = {
+            id: this.getNextAuthorId(),
+            name: authorName,
+            books: [bookId],
+        };
+
+        this.authorsDbService.createAuthor(newAuthor);
+
+        return newAuthor;
     }
 
     /**
