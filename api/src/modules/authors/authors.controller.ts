@@ -8,11 +8,14 @@ import {
     Delete,
     ParseIntPipe,
     ValidationPipe,
+    UseFilters,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+import { HttpExceptionFilter } from 'src/exception-filters/http-exception.filters';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('authors')
 export class AuthorsController {
     constructor(private readonly authorsService: AuthorsService) {}

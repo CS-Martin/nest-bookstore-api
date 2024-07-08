@@ -56,10 +56,28 @@ export class BooksService {
 
             this.booksDbService.createBook(newBook);
             this.logger.log(`${newBook.title} has been successfully created.`);
+
             return newBook;
         } catch (error) {
             throw new Error(`Failed to create book ${bookData.title}`);
         }
+    }
+
+    /**
+     * Create books for a given author.
+     *
+     * @param {number} authorId - The ID of the author.
+     * @param {string[]} bookTitles - The titles of the books to create.
+     */
+    createBooksForAuthor(authorId: number, bookTitles: string[]): void {
+        bookTitles.forEach((title) => {
+            const newBook: CreateBookDto = {
+                id: this.getNextBookId(),
+                title,
+                authors: [authorId],
+            };
+            this.booksDbService.createBook(newBook);
+        });
     }
 
     /**

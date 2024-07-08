@@ -38,14 +38,16 @@ export class AuthorsService {
         }
 
         try {
-            const latestId = this.getLatestAuthorId();
-            const newAuthor = { id: latestId + 1, ...authorData };
-
-            /**
-             * TODO: If author has books, create new books entity
-             */
-
+            const newAuthor = { id: this.getNextAuthorId(), ...authorData };
             this.authorsDbService.createAuthor(newAuthor);
+
+            // Create books for the new author if any
+            if (authorData.books && authorData.books.length > 0) {
+                this.booksService.createBooksForAuthor(
+                    newAuthor.id,
+                    authorData.books.map((book) => book.toString()),
+                );
+            }
 
             return newAuthor;
         } catch (error) {
@@ -123,7 +125,7 @@ export class AuthorsService {
         return author;
     }
 
-    findOneWithBooksName(id: number) {
+    findOneWithBooksName(id: number): CreateAuthorDto {
         const author = this.authorsDbService.getAuthorWithBooksName(id);
         if (!author) {
             throw new NotFoundException('Author not found');
@@ -131,7 +133,7 @@ export class AuthorsService {
         return author;
     }
 
-    findByName(name: string) {
+    findByName(name: string): CreateAuthorDto {
         this.logger.log('Finding author by name', name);
 
         const cleanName = name.trim().toLowerCase();
@@ -146,10 +148,8 @@ export class AuthorsService {
      *
      * @returns {number} The latest author ID.
      */
-    private getLatestAuthorId(): number {
-        const authorsArrayLength = this.authorsDbService.Authors.length;
-        return authorsArrayLength > 0
-            ? this.authorsDbService.Authors[authorsArrayLength - 1].id
-            : 0;
+    private getNextAuthorId(): number {
+        const authors = this.authorsDbService.Authors;
+        return authors.length > 0 ? authors[authors.length - 1].id + 1 : 1;
     }
 }
