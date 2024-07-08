@@ -41,6 +41,10 @@ export class AuthorsService {
             const latestId = this.getLatestAuthorId();
             const newAuthor = { id: latestId + 1, ...authorData };
 
+            /**
+             * TODO: If author has books, create new books entity
+             */
+
             this.authorsDbService.createAuthor(newAuthor);
 
             return newAuthor;
