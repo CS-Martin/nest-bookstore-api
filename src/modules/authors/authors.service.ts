@@ -16,7 +16,7 @@ export class AuthorsService {
          * Some books already has existing author
          * So we can't create new author
          * We can only return the existing author
-         * For the book to get its authorId and use it as reference
+         * For the book to get its authorId and use it as a foreign key
          */
         if (existingAuthor) {
             return existingAuthor;
@@ -25,7 +25,7 @@ export class AuthorsService {
         try {
             /**
              * Get the latest book id and increment it by 1
-             * So that if we ever delete a book, it's id will not be reused
+             * So that if we ever delete a book, id will just continue from latest id
              */
             const latestId =
                 this.authorsDbService.Authors[
@@ -37,16 +37,11 @@ export class AuthorsService {
                 ...authorData,
             };
 
-            this.logger.log('Creating Author:', newAuthor);
             this.authorsDbService.createAuthor(newAuthor);
 
-            // Return the new author with for books service to use its authorId
+            // Return the new author with for books service to use the id as a foreign key
             return newAuthor;
         } catch (error) {
-            this.logger.error(
-                `Failed to create author ${authorData.name}`,
-                error.stack,
-            );
             throw new Error(`Failed to create author ${authorData.name}`);
         }
     }
@@ -61,7 +56,6 @@ export class AuthorsService {
         try {
             authorToUpdate = { ...authorToUpdate, ...updateAuthorDto };
 
-            this.logger.log('Updating Author:', authorToUpdate);
             this.authorsDbService.updateAuthor(authorToUpdate);
 
             return this.findAll();
@@ -78,8 +72,6 @@ export class AuthorsService {
         }
 
         try {
-            this.logger.log('Removing Author:', authorToRemove);
-
             this.authorsDbService.deleteAuthor(authorToRemove);
 
             return this.findAll();

@@ -1,6 +1,6 @@
 import { AuthorsService } from 'src/modules/authors/authors.service';
 import { loadData } from '../utils';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateBookDto } from 'src/modules/books/dto/create-book.dto';
 import { UpdateBookDto } from 'src/modules/books/dto/update-book.dto';
 import { AuthorsDbService } from '../authors-db-lib/authors-db-lib.service';
@@ -10,6 +10,7 @@ import { AuthorsDbService } from '../authors-db-lib/authors-db-lib.service';
  */
 @Injectable()
 export class BooksDbService {
+    private logger = new Logger(BooksDbService.name);
     public Books = loadData().books;
 
     constructor(
@@ -51,7 +52,7 @@ export class BooksDbService {
             const bookAuthors = book.authors.map(
                 (authorId) => this.authorsService.findOne(authorId).name,
             );
-            console.log(book);
+
             return { ...book, authors: bookAuthors };
         });
     }
@@ -74,5 +75,17 @@ export class BooksDbService {
 
             return { ...book, authors: bookAuthors };
         }
+    }
+
+    removeAuthorFromBook(authorId: number, bookId: number) {
+        this.Books = this.Books.map((book) => {
+            if (book.id === bookId) {
+                book.authors = book.authors.filter(
+                    (author) => author !== authorId,
+                );
+            }
+
+            return book;
+        });
     }
 }

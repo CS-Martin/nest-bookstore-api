@@ -18,7 +18,7 @@ export class BooksController {
     constructor(private readonly booksService: BooksService) {}
 
     @Post()
-    create(@Body() createBookDto: CreateBookDto) {
+    create(@Body(new ValidationPipe()) createBookDto: CreateBookDto) {
         return this.booksService.create(createBookDto);
     }
 

@@ -3,6 +3,7 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateAuthorDto } from 'src/modules/authors/dto/create-author.dto';
 import { UpdateAuthorDto } from 'src/modules/authors/dto/update-author.dto';
 import { BooksService } from 'src/modules/books/books.service';
+import { BooksDbService } from '../books-db-lib/books-db-lib.service';
 
 @Injectable()
 export class AuthorsDbService {
@@ -12,6 +13,8 @@ export class AuthorsDbService {
     constructor(
         @Inject(forwardRef(() => BooksService))
         private readonly booksService: BooksService,
+        @Inject(forwardRef(() => BooksDbService))
+        private readonly booksDbService: BooksDbService,
     ) {}
 
     createAuthor(newAuthor: CreateAuthorDto) {
@@ -37,6 +40,16 @@ export class AuthorsDbService {
         this.Authors = this.Authors.filter(
             (author: CreateAuthorDto) => author.id !== authorToDelete.id,
         );
+
+        /**
+         * If delete a author, delete its referencing id in books too
+         */
+        for (const book of authorToDelete.books) {
+            this.booksDbService.removeAuthorFromBook(
+                Number(book),
+                authorToDelete.id,
+            );
+        }
     }
 
     getAllAuthors() {
@@ -80,6 +93,8 @@ export class AuthorsDbService {
 
     /**
      * Removes a book from the author's list of books.
+     * This function is used when deleting a book.
+     * Had to remove its own id from the author's list of books to avoid foreign key issues.
      *
      * @param {number} authorId - The ID of the author
      * @param {number} bookId - The ID of the book to be removed
