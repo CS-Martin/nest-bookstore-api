@@ -32,6 +32,7 @@ export class BooksService {
      */
     create(bookData: CreateBookDto): CreateBookDto {
         const existingBook = this.findByName(bookData.title);
+
         if (existingBook) {
             this.logger.log('Book already exists', existingBook);
             return existingBook;
@@ -90,7 +91,8 @@ export class BooksService {
      * @return {string} A success message.
      */
     remove(id: number): string {
-        const bookToRemove = this.findOne(id);
+        const bookToRemove: CreateBookDto = this.findOne(id);
+
         if (!bookToRemove) {
             throw new NotFoundException('Book not found');
         }
@@ -119,10 +121,13 @@ export class BooksService {
      * @return {CreateBookDto} The requested book.
      */
     findOne(id: number): CreateBookDto {
-        const book = this.booksDbService.getOneBookWithAuthorsId(id);
+        const book: CreateBookDto =
+            this.booksDbService.getOneBookWithAuthorsId(id);
+
         if (!book) {
             throw new NotFoundException('Book not found');
         }
+
         return book;
     }
 
@@ -150,7 +155,7 @@ export class BooksService {
         this.logger.log('Finding book by name', title);
         const cleanTitle = title.trim().toLowerCase();
         return this.booksDbService.Books.find(
-            (book) => book.title.toLowerCase() === cleanTitle,
+            (book: CreateBookDto) => book.title.toLowerCase() === cleanTitle,
         );
     }
 
