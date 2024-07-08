@@ -7,6 +7,7 @@ import {
     Param,
     Delete,
     ParseIntPipe,
+    ValidationPipe,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
@@ -17,7 +18,7 @@ export class AuthorsController {
     constructor(private readonly authorsService: AuthorsService) {}
 
     @Post()
-    create(@Body() createAuthorDto: CreateAuthorDto) {
+    create(@Body(new ValidationPipe()) createAuthorDto: CreateAuthorDto) {
         return this.authorsService.create(createAuthorDto);
     }
 
@@ -39,7 +40,7 @@ export class AuthorsController {
     @Patch(':id')
     update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateAuthorDto: UpdateAuthorDto,
+        @Body(new ValidationPipe()) updateAuthorDto: UpdateAuthorDto,
     ) {
         return this.authorsService.update(id, updateAuthorDto);
     }
