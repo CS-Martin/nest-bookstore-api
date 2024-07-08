@@ -49,9 +49,13 @@ export class BooksService {
              * Get the latest book id and increment it by 1
              * So that if we ever delete a book, generating new id will just continue from there
              */
+            const booksArrayLength = this.booksDbService.Books.length;
+
             const latestId: number =
-                this.booksDbService.Books[this.booksDbService.Books.length - 1]
-                    .id;
+                // If there are no books, latestId will be 0
+                booksArrayLength > 0
+                    ? this.booksDbService.Books[booksArrayLength - 1].id
+                    : 0;
 
             const newBook: CreateBookDto = {
                 id: latestId + 1,
@@ -60,14 +64,16 @@ export class BooksService {
             };
 
             // Create the book author using author service
-            for (const author of bookData.authors) {
-                const newAuthor = this.authorsService.create({
-                    name: author.toString(),
-                    books: [newBook.id],
-                });
+            if (bookData.authors) {
+                for (const author of bookData.authors) {
+                    const newAuthor = this.authorsService.create({
+                        name: author.toString(),
+                        books: [newBook.id],
+                    });
 
-                // Set the author id on the book
-                newBook.authors.push(newAuthor.id);
+                    // Set the author id on the book
+                    newBook.authors.push(newAuthor.id);
+                }
             }
 
             this.booksDbService.createBook(newBook);

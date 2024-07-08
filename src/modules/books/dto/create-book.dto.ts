@@ -24,5 +24,5 @@ export class CreateBookDto {
     description?: string;
 
     @MinLength(3, { each: true })
-    authors: number[];
+    authors: string[];
 }

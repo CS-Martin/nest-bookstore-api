@@ -84,13 +84,11 @@ export class BooksDbService {
     removeAuthorFromBook(bookId: number, authorId: number) {
         this.logger.log('Removing author:', authorId, 'from book:', bookId);
 
-        const book: CreateBookDto = this.getOneBookWithAuthorsId(bookId);
+        const book = this.getOneBookWithAuthorsId(bookId);
 
         // Remove the book from the author
         if (book) {
             book.authors = book.authors.filter((author) => author !== authorId);
         }
-
-        console.log('HAHAHAHA', book);
     }
 }

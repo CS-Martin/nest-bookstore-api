@@ -1,13 +1,25 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+    forwardRef,
+    Inject,
+    Injectable,
+    Logger,
+    NotFoundException,
+} from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorsDbService } from 'src/lib/authors-db-lib/authors-db-lib.service';
+import { BooksService } from '../books/books.service';
 
 @Injectable()
 export class AuthorsService {
     private logger = new Logger(AuthorsService.name);
 
-    constructor(private readonly authorsDbService: AuthorsDbService) {}
+    constructor(
+        @Inject(forwardRef(() => AuthorsDbService))
+        private readonly authorsDbService: AuthorsDbService,
+        @Inject(forwardRef(() => BooksService))
+        private readonly booksService: BooksService,
+    ) {}
 
     create(authorData: CreateAuthorDto) {
         const existingAuthor = this.findByName(authorData.name);
@@ -28,15 +40,28 @@ export class AuthorsService {
              * Get the latest book id and increment it by 1
              * So that if we ever delete a book, id will just continue from latest id
              */
+            const authorsArrayLength = this.authorsDbService.Authors.length;
+
             const latestId =
-                this.authorsDbService.Authors[
-                    this.authorsDbService.Authors.length - 1
-                ].id;
+                // If there are no authors, latestId will be 0
+                authorsArrayLength > 0
+                    ? this.authorsDbService.Authors[authorsArrayLength - 1].id
+                    : 0;
 
             const newAuthor = {
                 id: latestId + 1,
                 ...authorData,
             };
+
+            // Create the book
+            if (authorData.books) {
+                for (const book of authorData.books) {
+                    this.booksService.create({
+                        title: book.toString(),
+                        authors: [newAuthor.name],
+                    });
+                }
+            }
 
             this.authorsDbService.createAuthor(newAuthor);
 
