@@ -23,7 +23,7 @@ export class BooksController {
     }
 
     @Get()
-    findAll() {
+    findAll(): CreateBookDto[] {
         return this.booksService.findAll();
     }
 

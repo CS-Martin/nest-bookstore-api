@@ -21,68 +21,51 @@ export class AuthorsService {
         private readonly booksService: BooksService,
     ) {}
 
-    create(authorData: CreateAuthorDto) {
+    /**
+     * Creates a new author.
+     * If the author already exists, it returns the existing author.
+     * Otherwise, it creates a new author.
+     *
+     * @param {CreateAuthorDto} authorData - The data for the new author.
+     * @returns {CreateAuthorDto} The created author.
+     */
+    create(authorData: CreateAuthorDto): CreateAuthorDto {
         const existingAuthor = this.findByName(authorData.name);
 
-        /**
-         * Some books already has existing author
-         * So we can't create new author
-         * We can only return the existing author
-         * For the book to get its authorId and use it as a foreign key
-         */
         if (existingAuthor) {
             this.logger.log('Author already exists:', existingAuthor);
             return existingAuthor;
         }
 
         try {
-            /**
-             * Get the latest book id and increment it by 1
-             * So that if we ever delete a book, id will just continue from latest id
-             */
-            const authorsArrayLength = this.authorsDbService.Authors.length;
-
-            const latestId =
-                // If there are no authors, latestId will be 0
-                authorsArrayLength > 0
-                    ? this.authorsDbService.Authors[authorsArrayLength - 1].id
-                    : 0;
-
-            const newAuthor = {
-                id: latestId + 1,
-                ...authorData,
-            };
-
-            // Create the book
-            if (authorData.books) {
-                for (const book of authorData.books) {
-                    this.booksService.create({
-                        title: book.toString(),
-                        authors: [newAuthor.name],
-                    });
-                }
-            }
+            const latestId = this.getLatestAuthorId();
+            const newAuthor = { id: latestId + 1, ...authorData };
 
             this.authorsDbService.createAuthor(newAuthor);
 
-            // Return the new author with for books service to use the id as a foreign key
             return newAuthor;
         } catch (error) {
             throw new Error(`Failed to create author ${authorData.name}`);
         }
     }
 
-    update(id: number, updateAuthorDto: UpdateAuthorDto) {
-        let authorToUpdate: UpdateAuthorDto = this.findOne(id);
+    /**
+     * Updates an existing author.
+     *
+     * @param {number} id - The ID of the author to update.
+     * @param {UpdateAuthorDto} updateAuthorDto - The new data for the author.
+     * @returns {CreateAuthorDto[]} An array of all authors.
+     */
+    update(id: number, updateAuthorDto: UpdateAuthorDto): CreateAuthorDto[] {
+        const authorToUpdate = this.findOne(id);
 
         if (!authorToUpdate) {
             throw new NotFoundException('Author not found');
         }
 
         try {
-            authorToUpdate = { ...authorToUpdate, ...updateAuthorDto };
-
-            this.authorsDbService.updateAuthor(authorToUpdate);
+            const updatedAuthor = { ...authorToUpdate, ...updateAuthorDto };
+            this.authorsDbService.updateAuthor(updatedAuthor);
 
             return this.findAll();
         } catch (error) {
@@ -90,7 +73,13 @@ export class AuthorsService {
         }
     }
 
-    remove(id: number) {
+    /**
+     * Removes an author by its ID.
+     *
+     * @param {number} id - The ID of the author to remove.
+     * @returns {CreateAuthorDto[]} An array of all authors.
+     */
+    remove(id: number): CreateAuthorDto[] {
         const authorToRemove = this.findOne(id);
 
         if (!authorToRemove) {
@@ -99,18 +88,28 @@ export class AuthorsService {
 
         try {
             this.authorsDbService.deleteAuthor(authorToRemove);
-
             return this.findAll();
         } catch (error) {
             throw new Error(`Failed to remove author ${authorToRemove.name}`);
         }
     }
 
-    findAll() {
+    /**
+     * Retrieves all authors.
+     *
+     * @returns {CreateAuthorDto[]} An array of all authors.
+     */
+    findAll(): CreateAuthorDto[] {
         return this.authorsDbService.getAllAuthors();
     }
 
-    findOne(id: number) {
+    /**
+     * Retrieves an author by its ID.
+     *
+     * @param {number} id - The ID of the author to retrieve.
+     * @returns {CreateAuthorDto} The retrieved author.
+     */
+    findOne(id: number): CreateAuthorDto {
         const author = this.authorsDbService.getAuthorWithBooksId(id);
 
         if (!author) {
@@ -122,11 +121,9 @@ export class AuthorsService {
 
     findOneWithBooksName(id: number) {
         const author = this.authorsDbService.getAuthorWithBooksName(id);
-
         if (!author) {
             throw new NotFoundException('Author not found');
         }
-
         return author;
     }
 
@@ -138,5 +135,17 @@ export class AuthorsService {
         return this.authorsDbService.Authors.find(
             (author) => author.name.toLowerCase() === cleanName,
         );
+    }
+
+    /**
+     * Retrieves the latest author ID.
+     *
+     * @returns {number} The latest author ID.
+     */
+    private getLatestAuthorId(): number {
+        const authorsArrayLength = this.authorsDbService.Authors.length;
+        return authorsArrayLength > 0
+            ? this.authorsDbService.Authors[authorsArrayLength - 1].id
+            : 0;
     }
 }

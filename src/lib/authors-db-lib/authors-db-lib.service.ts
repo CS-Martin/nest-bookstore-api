@@ -17,95 +17,59 @@ export class AuthorsDbService {
         private readonly booksDbService: BooksDbService,
     ) {}
 
-    createAuthor(newAuthor: CreateAuthorDto) {
+    createAuthor(newAuthor: CreateAuthorDto): void {
         this.logger.log('Creating author:', newAuthor);
-
         this.Authors.push(newAuthor);
     }
 
-    updateAuthor(authorToUpdate: UpdateAuthorDto) {
+    updateAuthor(authorToUpdate: UpdateAuthorDto): void {
         this.logger.log('Updating author:', authorToUpdate);
-
-        this.Authors = this.Authors.map((author) => {
-            if (author.id === authorToUpdate.id) {
-                return { ...author, ...authorToUpdate };
-            }
-            return author;
-        });
+        this.Authors = this.Authors.map((author) =>
+            author.id === authorToUpdate.id
+                ? { ...author, ...authorToUpdate }
+                : author,
+        );
     }
 
-    deleteAuthor(authorToDelete: CreateAuthorDto) {
+    deleteAuthor(authorToDelete: CreateAuthorDto): void {
         this.logger.log('Deleting author:', authorToDelete);
-
         this.Authors = this.Authors.filter(
-            (author: CreateAuthorDto) => author.id !== authorToDelete.id,
+            (author) => author.id !== authorToDelete.id,
         );
 
-        /**
-         * If delete a author, delete its referencing id in books too
-         */
-        for (const book of authorToDelete.books) {
-            console.log('BOOKDASDASD', book, authorToDelete.id);
-            this.booksDbService.removeAuthorFromBook(
-                Number(book),
-                authorToDelete.id,
-            );
-        }
+        // Remove the author's books
+        authorToDelete.books.forEach((bookId) =>
+            this.booksDbService.removeAuthorFromBook(bookId, authorToDelete.id),
+        );
     }
 
-    getAllAuthors() {
+    getAllAuthors(): CreateAuthorDto[] {
         return this.Authors.map((author) => {
             this.logger.log('Author:', author);
-
             const books = author.books.map(
-                (bookId: number) => this.booksService.findOne(bookId).title,
+                (bookId) => this.booksService.findOne(bookId).title,
             );
-
             return { ...author, books };
         });
     }
 
-    /**
-     * Retrieves an author with the specified ID from the list of authors.
-     *
-     * @param {number} id - The ID of the author to retrieve.
-     * @return {Author | undefined} The author with the specified ID, or undefined if not found.
-     */
-    getAuthorWithBooksId(id: number) {
+    getAuthorWithBooksId(id: number): CreateAuthorDto {
         return this.Authors.find((author) => author.id === id);
     }
 
-    /**
-     * Finds an author with the given id and retrieves the titles of their associated books.
-     *
-     * @param {number} id - The id of the author to search for
-     */
-    getAuthorWithBooksName(id: number) {
+    getAuthorWithBooksName(id: number): CreateAuthorDto {
         const author = this.Authors.find((author) => author.id === id);
-
         if (author) {
             const books = author.books.map(
                 (bookId) => this.booksService.findOne(bookId).title,
             );
-
             return { ...author, books };
         }
     }
 
-    /**
-     * Removes a book from the author's list of books.
-     * This function is used when deleting a book.
-     * Had to remove its own id from the author's list of books to avoid foreign key issues.
-     *
-     * @param {number} authorId - The ID of the author
-     * @param {number} bookId - The ID of the book to be removed
-     */
-    removeBookFromAuthor(authorId: number, bookId: number) {
+    removeBookFromAuthor(authorId: number, bookId: number): void {
         this.logger.log('Removing book:', bookId, 'from author:', authorId);
-
         const author = this.getAuthorWithBooksId(authorId);
-
-        // Remove the book from the author
         if (author) {
             author.books = author.books.filter((book) => book !== bookId);
         }
