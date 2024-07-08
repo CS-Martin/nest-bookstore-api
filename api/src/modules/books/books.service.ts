@@ -45,6 +45,7 @@ export class BooksService {
                 authors: [],
             };
 
+            // Create authors for the new book if any
             if (bookData.authors.length > 0) {
                 newBook.authors = bookData.authors.map((author) => {
                     const newAuthor = this.authorsService.createAuthorForBooks(
