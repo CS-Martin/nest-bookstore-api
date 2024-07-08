@@ -45,6 +45,7 @@ export class AuthorsDbService {
          * If delete a author, delete its referencing id in books too
          */
         for (const book of authorToDelete.books) {
+            console.log('BOOKDASDASD', book, authorToDelete.id);
             this.booksDbService.removeAuthorFromBook(
                 Number(book),
                 authorToDelete.id,

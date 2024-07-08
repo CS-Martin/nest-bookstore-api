@@ -19,10 +19,13 @@ export class BooksDbService {
     ) {}
 
     createBook(book: CreateBookDto) {
+        this.logger.log('Creating book:', book);
+
         this.Books.push(book);
     }
 
     updateBook(bookToUpdate: UpdateBookDto) {
+        this.logger.log('Updating book:', bookToUpdate);
         this.Books = this.Books.map((book) => {
             if (book.id === bookToUpdate.id) {
                 return { ...book, ...bookToUpdate };
@@ -49,6 +52,7 @@ export class BooksDbService {
 
     getAllBooks() {
         return this.Books.map((book) => {
+            // Get the authors of the book
             const bookAuthors = book.authors.map(
                 (authorId) => this.authorsService.findOne(authorId).name,
             );
@@ -77,15 +81,16 @@ export class BooksDbService {
         }
     }
 
-    removeAuthorFromBook(authorId: number, bookId: number) {
-        this.Books = this.Books.map((book) => {
-            if (book.id === bookId) {
-                book.authors = book.authors.filter(
-                    (author) => author !== authorId,
-                );
-            }
+    removeAuthorFromBook(bookId: number, authorId: number) {
+        this.logger.log('Removing author:', authorId, 'from book:', bookId);
 
-            return book;
-        });
+        const book: CreateBookDto = this.getOneBookWithAuthorsId(bookId);
+
+        // Remove the book from the author
+        if (book) {
+            book.authors = book.authors.filter((author) => author !== authorId);
+        }
+
+        console.log('HAHAHAHA', book);
     }
 }
