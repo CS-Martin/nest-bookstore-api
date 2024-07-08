@@ -176,7 +176,8 @@ export class AuthorsService {
      * @returns {number} The latest author ID.
      */
     private getNextAuthorId(): number {
-        const authors = this.authorsDbService.Authors;
-        return authors.length > 0 ? authors[authors.length - 1].id + 1 : 1;
+        const authorsArrayLength = this.authorsDbService.Authors.length;
+
+        return authorsArrayLength > 0 ? authorsArrayLength + 1 : 1;
     }
 }

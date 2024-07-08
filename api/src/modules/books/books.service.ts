@@ -184,7 +184,7 @@ export class BooksService {
      * @return {number} The next available book ID.
      */
     private getNextBookId(): number {
-        const books = this.booksDbService.Books;
-        return books.length > 0 ? books[books.length - 1].id + 1 : 1;
+        const booksArrayLength = this.booksDbService.Books.length;
+        return booksArrayLength > 0 ? booksArrayLength + 1 : 0;
     }
 }
