@@ -19,6 +19,7 @@ export class AuthorsService {
          * For the book to get its authorId and use it as a foreign key
          */
         if (existingAuthor) {
+            this.logger.log('Author already exists:', existingAuthor);
             return existingAuthor;
         }
 

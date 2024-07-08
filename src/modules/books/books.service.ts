@@ -1,9 +1,4 @@
-import {
-    ConflictException,
-    Injectable,
-    Logger,
-    NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BooksDbService } from 'src/lib/books-db-lib/books-db-lib.service';
@@ -30,16 +25,23 @@ export class BooksService {
 
     /**
      * Create a new book using the provided book data.
-     * If the book has authors, they will be created as well.
+     * If the book has authors, they will should be created as well.
      *
      * @param {CreateBookDto} bookData - The data for the new book.
      * @return {void} No return value.
      */
-    create(bookData: CreateBookDto): string {
+    create(bookData: CreateBookDto): { message: string; book: CreateBookDto } {
         const existingBook = this.findByName(bookData.title);
 
         if (existingBook) {
-            throw new ConflictException('Book already exists');
+            this.logger.log('Book already exists', existingBook);
+
+            return {
+                // Do not return ConflictException as it will
+                // be used as a foreign key from authors service
+                message: 'Book already exists',
+                book: existingBook,
+            };
         }
 
         try {
@@ -71,7 +73,10 @@ export class BooksService {
             this.booksDbService.createBook(newBook);
             this.logger.log(`${newBook.title} has been successfully created.`);
 
-            return `${newBook.title} has been successfully created.`;
+            return {
+                message: `${newBook.title} has been successfully created.`,
+                book: newBook,
+            };
         } catch (error) {
             throw new Error(`Failed to create book ${bookData.title}`);
         }
