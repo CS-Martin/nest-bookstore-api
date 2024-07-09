@@ -2,7 +2,7 @@
 
 > <sup>Short Description</sup>
 
-This is a nestjs exercise. Just a simple bookstore application with CRUD functionalities where user may add and delete authors and books.
+This is a nestjs exercise. Just a simple bookshelf application with CRUD functionalities where user may add and delete authors and books.
 
 > <sup>Sample Screenshot</sup>
 ![Alt text](client/public/images/home-sample-screenshot.png)
