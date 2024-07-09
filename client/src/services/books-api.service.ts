@@ -1,4 +1,6 @@
-const fetchBooks = async () => {
+import { Book } from '@/types/books.types';
+
+const fetchBooks = async (): Promise<Book[]> => {
 	try {
 		const response: Response = await fetch('http://localhost:3000/books');
 
@@ -18,5 +20,7 @@ const fetchBooks = async () => {
 		throw error;
 	}
 };
+
+const fetchBookCover = async (): Promise<string> => {};
 
 export default fetchBooks;
