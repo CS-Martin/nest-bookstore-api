@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { DrawerClose, DrawerFooter } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -22,14 +23,13 @@ const AddBookForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="px-4 py-3 flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="px-4 flex flex-col gap-3">
 
             <div className="flex flex-col gap-2">
                 <Label>Book Title:</Label>
                 <Input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex. Harry Potter and the Philosopher's Stone"
                 />
             </div>
 
@@ -38,7 +38,6 @@ const AddBookForm = () => {
                 <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Ex. Harry Potter is a series of seven fantasy novels written by British author J. K. Rowling."
                 />
             </div>
 
@@ -61,11 +60,15 @@ const AddBookForm = () => {
                 <Input
                     value={authors}
                     onChange={(e) => setAuthor([e.target.value])}
-                    placeholder="Ex. J.K. Rowling"
                 />
             </div>
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit" >Submit</Button>
+            <DrawerFooter className="p-0">
+                <DrawerClose>
+                    <Button type="button" variant="ghost">Cancel</Button>
+                </DrawerClose>
+            </DrawerFooter>
         </form>
     )
 }

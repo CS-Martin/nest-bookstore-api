@@ -20,7 +20,7 @@ const AddButton = () => {
             <DrawerTrigger className="fixed ms-[73%] sm:ms-[85%] md:ms-80 z-50 bottom-10 p-4 rounded-full bg-blue-500 shadow-xl">
                 <Plus className="text-white" size={32} />
             </DrawerTrigger>
-            <DrawerContent className="mx-auto max-w-[420px] h-fit gap-4 max-h-[90%]">
+            <DrawerContent className="mx-auto max-w-[420px] h-full max-h-[90%]">
                 <DrawerHeader>
                     <DrawerTitle>Create Book</DrawerTitle>
                     <DrawerDescription>Fill the form below to create a new book.</DrawerDescription>
@@ -30,14 +30,6 @@ const AddButton = () => {
                 <ScrollArea className="overflow-y-auto">
                     <AddBookForm />
                 </ScrollArea>
-
-
-                <DrawerFooter>
-                    <Button>Submit</Button>
-                    <DrawerClose>
-                        <Button variant="ghost">Cancel</Button>
-                    </DrawerClose>
-                </DrawerFooter>
             </DrawerContent>
         </Drawer>
     )
