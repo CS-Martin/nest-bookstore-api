@@ -1,4 +1,4 @@
-import fetchBooks from '@/api/books-api.service';
+import { bookService } from '@/services/db';
 import { Book } from '@/types/books.types';
 import { useEffect, useState } from 'react';
 
@@ -7,7 +7,7 @@ export const useBooks = (): Book[] => {
 
 	useEffect(() => {
 		const fetchBooksData = async () => {
-			const books: Book[] = await fetchBooks();
+			const books: Book[] = await bookService.getBooks();
 			setBooks(books);
 		};
 

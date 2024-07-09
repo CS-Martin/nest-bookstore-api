@@ -9,7 +9,6 @@ import { Book } from "@/types/books.types";
 
 export default function Home() {
   const books = useBooks();
-  console.log(books);
 
   return (
     <ThemeProvider
@@ -18,7 +17,7 @@ export default function Home() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className="bg-background relative lg:w-[420px] px-4 pt-24 min-h-screen h-fit">
+      <main className="bg-background relative lg:w-[420px] px-4 pt-24 min-h-screen h-fi">
         <Navbar />
 
 

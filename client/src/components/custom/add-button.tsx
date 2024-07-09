@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/drawer"
 import AddBookForm from "./forms/add-book-form"
 import { ScrollArea } from "../ui/scroll-area"
+import { Separator } from "../ui/separator"
 
 const AddButton = () => {
     return (
@@ -23,6 +24,7 @@ const AddButton = () => {
                 <DrawerHeader>
                     <DrawerTitle>Create Book</DrawerTitle>
                     <DrawerDescription>Fill the form below to create a new book.</DrawerDescription>
+                    <Separator />
                 </DrawerHeader>
 
                 <ScrollArea className="overflow-y-auto">
