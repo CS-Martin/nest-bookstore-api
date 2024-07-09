@@ -1,6 +1,6 @@
 "use client";
 
-import AddButton from "@/components/custom/home/add-button";
+import AddButton from "@/components/custom/add-button";
 import BookCard from "@/components/custom/home/book-card";
 import Navbar from "@/components/custom/nav";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -17,13 +17,17 @@ export default function Home() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className="bg-background scrollbar-hide relative w-[420px] px-4 pt-24 h-full">
+      <main className="bg-background scrollbar-hide relative w-full lg:w-[420px] px-4 pt-24 h-full">
         <Navbar />
-        <div className="grid grid-cols-2 gap-4">
+
+
+        <div className="grid grid-cols-2 mt-3 gap-5">
           {books.map((book) => (
             <BookCard key={book} book={book} />
           ))}
         </div>
+
+
         <AddButton />
       </main>
     </ThemeProvider>
