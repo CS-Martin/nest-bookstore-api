@@ -19,6 +19,10 @@ export class CreateBookDto {
     @MinLength(3)
     title: string;
 
+    @IsOptional()
+    @IsString()
+    isbn?: string;
+
     @IsString()
     @IsOptional()
     description?: string;

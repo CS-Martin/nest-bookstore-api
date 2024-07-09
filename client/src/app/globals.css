@@ -2,32 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+	:root {
+		--background: 0 0% 100%; /* white */
+		--foreground: 0 0% 0%; /* black */
+
+		--card: 0 0% 100%; /* white */
+		--card-foreground: 0 0% 0%; /* black */
+
+		--popover: 0 0% 100%; /* white */
+		--popover-foreground: 0 0% 0%; /* black */
+
+		--primary: 0 0% 0%; /* black */
+		--primary-foreground: 0 0% 100%; /* white */
+
+		--secondary: 0 0% 50%; /* gray */
+		--secondary-foreground: 0 0% 0%; /* black */
+
+		--muted: 0 0% 75%; /* lightgray */
+		--muted-foreground: 0 0% 25%; /* darkgray */
+
+		--accent: 180 100% 25%; /* teal */
+		--accent-foreground: 0 0% 0%; /* black */
+
+		--destructive: 0 100% 50%; /* red */
+		--destructive-foreground: 0 0% 100%; /* white */
+
+		--border: 0 0% 75%; /* lightgray */
+		--input: 0 0% 75%; /* lightgray */
+		--ring: 0 0% 0%; /* black */
+
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 0 0% 7.06%; /* black */
+		--foreground: 0 0% 100%;
+
+		--card: 0 0% 11.37%; /* darkgray */
+		--card-foreground: 0 0% 100%; /* white */
+
+		--popover: 0 0% 25%; /* darkgray */
+		--popover-foreground: 0 0% 100%; /* white */
+
+		--primary: 0 0% 100%; /* white */
+		--primary-foreground: 0 0% 0%; /* black */
+
+		--secondary: 0 0% 25%; /* darkgray */
+		--secondary-foreground: 0 0% 100%; /* white */
+
+		--muted: 0 0% 25%; /* darkgray */
+		--muted-foreground: 0 0% 75%; /* lightgray */
+
+		--accent: 180 100% 25%; /* teal */
+		--accent-foreground: 0 0% 0%; /* black */
+
+		--destructive: 0 100% 25%; /* darkred */
+		--destructive-foreground: 0 0% 100%; /* white */
+
+		--border: 0 0% 25%; /* darkgray */
+		--input: 0 0% 25%; /* darkgray */
+		--ring: 0 0% 50%; /* gray */
+	}
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
 }
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }

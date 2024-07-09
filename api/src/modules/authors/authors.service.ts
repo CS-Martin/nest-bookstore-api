@@ -46,6 +46,9 @@ export class AuthorsService {
 
             // Create books for the new author if any
             if (authorData.books && authorData.books.length > 0) {
+                // createBooksForAuthor function returns the created book
+                // so we can get the id of the created book and push it to newAuthor.books
+                // as its foreign key
                 newAuthor.books = authorData.books.map((book) => {
                     const newBook = this.booksService.createBooksForAuthor(
                         newAuthor.id,
@@ -176,7 +179,8 @@ export class AuthorsService {
      * @returns {number} The latest author ID.
      */
     private getNextAuthorId(): number {
-        const authors = this.authorsDbService.Authors;
-        return authors.length > 0 ? authors[authors.length - 1].id + 1 : 1;
+        const authorsArrayLength = this.authorsDbService.Authors.length;
+
+        return authorsArrayLength > 0 ? authorsArrayLength + 1 : 1;
     }
 }
