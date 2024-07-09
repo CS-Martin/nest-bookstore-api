@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { bookService } from "@/services/db"
+import { bookService } from "@/services/book-db"
 import { Book } from "@/types/books.types"
 import { useState } from "react"
 

@@ -1,4 +1,4 @@
-import { bookService } from '@/services/db';
+import { bookService } from '@/services/book-db';
 import { Book } from '@/types/books.types';
 import { useEffect, useState } from 'react';
 
