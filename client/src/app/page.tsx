@@ -9,7 +9,7 @@ export default function Home() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className="bg-background w-[500px] h-full">
+      <main className="bg-background relative w-[500px] h-full">
         <Navbar />
       </main>
     </ThemeProvider>
