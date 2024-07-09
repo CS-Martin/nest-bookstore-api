@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
-import fetchBooks from "../services/books-api.service";
+import fetchBooks from '@/api/books-api.service';
+import { Book } from '@/types/books.types';
+import { useEffect, useState } from 'react';
 
-export const useBooks = () => {
-  const [books, setBooks] = useState([]);
+export const useBooks = (): Book[] => {
+	const [books, setBooks] = useState<Book[]>([]);
 
-  useEffect(() => {
-    fetchBooks().then(setBooks);
-  }, []);
+	useEffect(() => {
+		const fetchBooksData = async () => {
+			const books: Book[] = await fetchBooks();
+			setBooks(books);
+		};
 
-  return books;
+		fetchBooksData();
+	}, []);
+
+	return books;
 };

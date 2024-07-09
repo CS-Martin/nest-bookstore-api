@@ -5,6 +5,7 @@ import BookCard from "@/components/custom/home/book-card";
 import Navbar from "@/components/custom/nav";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { useBooks } from "@/hooks/books.hooks";
+import { Book } from "@/types/books.types";
 
 export default function Home() {
   const books = useBooks();
@@ -17,16 +18,15 @@ export default function Home() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className="bg-background scrollbar-hide relative w-full lg:w-[420px] px-4 pt-24 h-full">
+      <main className="bg-background relative lg:w-[420px] px-4 pt-24 min-h-screen h-fit">
         <Navbar />
 
 
         <div className="grid grid-cols-2 mt-3 gap-5">
-          {books.map((book) => (
-            <BookCard key={book} book={book} />
+          {books.map((book: Book, index: number) => (
+            <BookCard key={index} book={book} />
           ))}
         </div>
-
 
         <AddButton />
       </main>
