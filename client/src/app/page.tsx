@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import BookCard from "@/components/custom/home/book-card";
 import Navbar from "@/components/custom/nav";

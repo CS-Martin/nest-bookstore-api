@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import fetchBooks from '../services/books-api.service';
+import { useEffect, useState } from "react";
+import fetchBooks from "../services/books-api.service";
 
 export const useBooks = () => {
-	const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState([]);
 
-	useEffect(() => {
-		fetchBooks().then(setBooks);
-	}, []);
+  useEffect(() => {
+    fetchBooks().then(setBooks);
+  }, []);
 
-	return books;
+  return books;
 };
