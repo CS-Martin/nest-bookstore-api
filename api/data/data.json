@@ -3,24 +3,28 @@
         {
             "id": 1,
             "title": "The Hobbit",
+            "isbn": "9780007525508",
             "description": "A fantasy novel by J.R.R. Tolkien.",
             "authors": [1]
         },
         {
             "id": 2,
             "title": "To Kill a Mockingbird",
+            "isbn": "9783498038083",
             "description": "A novel by Harper Lee.",
             "authors": [2]
         },
         {
             "id": 3,
             "title": "Harry Potter and the Philosopher's Stone",
+            "isbn": "9780439554930",
             "description": "A fantasy novel by J.K. Rowling.",
             "authors": [3]
         },
         {
             "id": 4,
             "title": "Beautiful Creatures",
+            "isbn": "9780316042673",
             "description": "Beautiful Creatures is a 2009 American young adult novel written by authors Kami Garcia and Margaret Stohl and the first book in the Caster Chronicles series. The book was published on December 1, 2009 by Little, Brown, and Company. In the UK, Beautiful Creatures is published by Penguin Books.",
             "authors": [4, 5]
         }

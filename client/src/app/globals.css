@@ -3,74 +3,82 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%; /* white */
-    --foreground: 0 0% 0%; /* black */
+	:root {
+		--background: 0 0% 100%; /* white */
+		--foreground: 0 0% 0%; /* black */
 
-    --card: 0 0% 100%; /* white */
-    --card-foreground: 0 0% 0%; /* black */
+		--card: 0 0% 100%; /* white */
+		--card-foreground: 0 0% 0%; /* black */
 
-    --popover: 0 0% 100%; /* white */
-    --popover-foreground: 0 0% 0%; /* black */
+		--popover: 0 0% 100%; /* white */
+		--popover-foreground: 0 0% 0%; /* black */
 
-    --primary: 0 0% 0%; /* black */
-    --primary-foreground: 0 0% 100%; /* white */
+		--primary: 0 0% 0%; /* black */
+		--primary-foreground: 0 0% 100%; /* white */
 
-    --secondary: 0 0% 50%; /* gray */
-    --secondary-foreground: 0 0% 0%; /* black */
+		--secondary: 0 0% 50%; /* gray */
+		--secondary-foreground: 0 0% 0%; /* black */
 
-    --muted: 0 0% 75%; /* lightgray */
-    --muted-foreground: 0 0% 25%; /* darkgray */
+		--muted: 0 0% 75%; /* lightgray */
+		--muted-foreground: 0 0% 25%; /* darkgray */
 
-    --accent: 180 100% 25%; /* teal */
-    --accent-foreground: 0 0% 0%; /* black */
+		--accent: 180 100% 25%; /* teal */
+		--accent-foreground: 0 0% 0%; /* black */
 
-    --destructive: 0 100% 50%; /* red */
-    --destructive-foreground: 0 0% 100%; /* white */
+		--destructive: 0 100% 50%; /* red */
+		--destructive-foreground: 0 0% 100%; /* white */
 
-    --border: 0 0% 75%; /* lightgray */
-    --input: 0 0% 75%; /* lightgray */
-    --ring: 0 0% 0%; /* black */
+		--border: 0 0% 75%; /* lightgray */
+		--input: 0 0% 75%; /* lightgray */
+		--ring: 0 0% 0%; /* black */
 
-    --radius: 0.5rem;
-  }
+		--radius: 0.5rem;
+	}
 
-  .dark {
-    --background: 0 0% 7.06%; /* black */
-    --foreground: 0 0% 100%;
+	.dark {
+		--background: 0 0% 7.06%; /* black */
+		--foreground: 0 0% 100%;
 
-    --card: 0 0% 11.37%; /* darkgray */
-    --card-foreground: 0 0% 100%; /* white */
+		--card: 0 0% 11.37%; /* darkgray */
+		--card-foreground: 0 0% 100%; /* white */
 
-    --popover: 0 0% 25%; /* darkgray */
-    --popover-foreground: 0 0% 100%; /* white */
+		--popover: 0 0% 25%; /* darkgray */
+		--popover-foreground: 0 0% 100%; /* white */
 
-    --primary: 0 0% 100%; /* white */
-    --primary-foreground: 0 0% 0%; /* black */
+		--primary: 0 0% 100%; /* white */
+		--primary-foreground: 0 0% 0%; /* black */
 
-    --secondary: 0 0% 25%; /* darkgray */
-    --secondary-foreground: 0 0% 100%; /* white */
+		--secondary: 0 0% 25%; /* darkgray */
+		--secondary-foreground: 0 0% 100%; /* white */
 
-    --muted: 0 0% 25%; /* darkgray */
-    --muted-foreground: 0 0% 75%; /* lightgray */
+		--muted: 0 0% 25%; /* darkgray */
+		--muted-foreground: 0 0% 75%; /* lightgray */
 
-    --accent: 180 100% 25%; /* teal */
-    --accent-foreground: 0 0% 0%; /* black */
+		--accent: 180 100% 25%; /* teal */
+		--accent-foreground: 0 0% 0%; /* black */
 
-    --destructive: 0 100% 25%; /* darkred */
-    --destructive-foreground: 0 0% 100%; /* white */
+		--destructive: 0 100% 25%; /* darkred */
+		--destructive-foreground: 0 0% 100%; /* white */
 
-    --border: 0 0% 25%; /* darkgray */
-    --input: 0 0% 25%; /* darkgray */
-    --ring: 0 0% 50%; /* gray */
-  }
+		--border: 0 0% 25%; /* darkgray */
+		--input: 0 0% 25%; /* darkgray */
+		--ring: 0 0% 50%; /* gray */
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }

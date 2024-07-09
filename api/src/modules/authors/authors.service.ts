@@ -46,6 +46,9 @@ export class AuthorsService {
 
             // Create books for the new author if any
             if (authorData.books && authorData.books.length > 0) {
+                // createBooksForAuthor function returns the created book
+                // so we can get the id of the created book and push it to newAuthor.books
+                // as its foreign key
                 newAuthor.books = authorData.books.map((book) => {
                     const newBook = this.booksService.createBooksForAuthor(
                         newAuthor.id,
