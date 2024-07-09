@@ -17,15 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} `}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <body className={`${inter.className} bg-black min-h-screen h-screen w-full p-0 m-0 flex flex-col items-center justify-center`}>
+        {children}
       </body>
     </html>
   );

@@ -1,9 +1,17 @@
-import Image from "next/image";
+import Navbar from "@/components/custom/nav";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-
-    </main>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <main className="bg-background w-[500px] h-full">
+        <Navbar />
+      </main>
+    </ThemeProvider>
   );
 }
