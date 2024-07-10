@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { Handlee, Inter, Patrick_Hand, Playfair_Display, Playpen_Sans, Poppins } from "next/font/google";
+import {
+  Handlee,
+  Inter,
+  Patrick_Hand,
+  Playfair_Display,
+  Playpen_Sans,
+  Poppins,
+} from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({ subsets: ['latin'], weight: '400' });
+const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "Bookshelf",
@@ -24,4 +31,3 @@ export default function RootLayout({
     </html>
   );
 }
-

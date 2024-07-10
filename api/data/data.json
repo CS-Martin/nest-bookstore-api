@@ -4,57 +4,71 @@
             "id": 1,
             "title": "The Hobbit",
             "isbn": "9780007525508",
-            "description": "A fantasy novel by J.R.R. Tolkien.",
-            "authors": [1]
+            "description": "A fantasy novel by J.R.R. Tolkien."
         },
         {
             "id": 2,
             "title": "To Kill a Mockingbird",
             "isbn": "9783498038083",
-            "description": "A novel by Harper Lee.",
-            "authors": [2]
+            "description": "A novel by Harper Lee."
         },
         {
             "id": 3,
             "title": "Harry Potter and the Philosopher's Stone",
             "isbn": "9780439554930",
-            "description": "A fantasy novel by J.K. Rowling.",
-            "authors": [3]
+            "description": "A fantasy novel by J.K. Rowling."
         },
         {
             "id": 4,
             "title": "Beautiful Creatures",
             "isbn": "9780316042673",
-            "description": "Beautiful Creatures is a 2009 American young adult novel written by authors Kami Garcia and Margaret Stohl and the first book in the Caster Chronicles series. The book was published on December 1, 2009 by Little, Brown, and Company. In the UK, Beautiful Creatures is published by Penguin Books.",
-            "authors": [4, 5]
+            "description": "Beautiful Creatures is a 2009 American young adult novel written by authors Kami Garcia and Margaret Stohl and the first book in the Caster Chronicles series. The book was published on December 1, 2009 by Little, Brown, and Company. In the UK, Beautiful Creatures is published by Penguin Books."
         }
     ],
 
     "authors": [
         {
             "id": 1,
-            "name": "J.R.R. Tolkien",
-            "books": [1]
+            "name": "J.R.R. Tolkien"
         },
         {
             "id": 2,
-            "name": "Harper Lee",
-            "books": [2]
+            "name": "Harper Lee"
         },
         {
             "id": 3,
-            "name": "J.K. Rowling",
-            "books": [3]
+            "name": "J.K. Rowling"
         },
         {
             "id": 4,
-            "name": "Margaret Stohl",
-            "books": [4]
+            "name": "Margaret Stohl"
         },
         {
             "id": 5,
-            "name": "Kami Garcia",
-            "books": [4]
+            "name": "Kami Garcia"
+        }
+    ],
+
+    "authors_and_books": [
+        {
+            "author_id": 1,
+            "book_id": 1
+        },
+        {
+            "author_id": 2,
+            "book_id": 2
+        },
+        {
+            "author_id": 3,
+            "book_id": 3
+        },
+        {
+            "author_id": 4,
+            "book_id": 4
+        },
+        {
+            "author_id": 5,
+            "book_id": 4
         }
     ]
 }
