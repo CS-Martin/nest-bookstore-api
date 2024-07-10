@@ -19,7 +19,9 @@ export class BookService {
     ) {}
 
     create(createBookDto: CreateBookDto) {
-        const existingBook = this.findOne(createBookDto.id);
+        const existingBook = this.bookDbLibService.getBookByTitle(
+            createBookDto.title,
+        );
 
         if (existingBook) {
             throw new NotFoundException('Book already exists');
@@ -89,7 +91,7 @@ export class BookService {
     }
 
     private generateId(): number {
-        const booksArrayLength = this.bookDbLibService.BooksArray.length;
+        const booksArrayLength = this.bookDbLibService.getBooksArrayLength();
         return booksArrayLength > 0 ? booksArrayLength + 1 : 0;
     }
 }
