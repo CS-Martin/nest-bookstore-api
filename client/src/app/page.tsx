@@ -40,7 +40,7 @@ export default function Home() {
           </div>
 
 
-          <AddButton onAddBook={handleAddBook} />
+          <AddButton />
         </div>
       </main>
     </ThemeProvider>

@@ -6,11 +6,11 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { bookService } from "@/services/book-db"
 import { Book } from "@/types/books.types"
-import { Minus, X } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
+const AddBookForm = () => {
     const router = useRouter();
 
     const [isDisabled, setIsDisabled] = useState(true)
@@ -47,10 +47,11 @@ const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
             <div className="flex flex-col gap-2">
                 <Label>Book Title:</Label>
                 <Input
+                    className="border-border"
                     value={title}
                     onChange={(e) => {
                         setTitle(e.target.value);
-                        setIsDisabled(e.target.value.length >= 3);
+                        setIsDisabled(e.target.value.length <= 3);
                     }}
                 />
             </div>
@@ -58,6 +59,7 @@ const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
             <div className="flex flex-col gap-2">
                 <Label>Book Description:</Label>
                 <Textarea
+                    className="border-border"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -66,6 +68,7 @@ const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
             <div className="flex flex-col gap-2">
                 <Label>Book ISBN <small>(If any):</small></Label>
                 <Input
+                    className="border-border"
                     value={isbn}
                     onChange={(e) => setIsbn(e.target.value)}
                     placeholder="Ex. 9783161484100"
@@ -81,6 +84,7 @@ const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
                 {authors.map((author, index = 1) => (
                     <div className="flex gap-2">
                         <Input
+                            className="border-border"
                             key={index}
                             value={author}
                             onChange={(e) => handleAddAuthor(index, e.target.value)}
@@ -89,7 +93,7 @@ const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
                     </div>
                 ))}
 
-                <Button variant="outline" type="button" onClick={addAuthorField}><small>Add more author</small></Button>
+                <Button variant="outline" type="button" className="border-border" onClick={addAuthorField}><Plus size={18} className="me-2" /> Add more author </Button>
             </div>
 
             <Button type="submit" disabled={isDisabled} >Submit</Button>
