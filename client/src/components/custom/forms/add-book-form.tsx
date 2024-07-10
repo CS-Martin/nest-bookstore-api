@@ -6,20 +6,39 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { bookService } from "@/services/book-db"
 import { Book } from "@/types/books.types"
+import { Minus, X } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const AddBookForm = () => {
+const AddBookForm = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
+    const router = useRouter();
+
+    const [isDisabled, setIsDisabled] = useState(true)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [isbn, setIsbn] = useState('')
-    const [authors, setAuthor] = useState<string[]>([])
+    const [authors, setAuthors] = useState<string[]>([''])
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
         const book: Book = { title, description, isbn, authors };
-
         await bookService.createBook(book);
+        router.refresh();
+    };
+
+    const handleAddAuthor = (index: number, value: string) => {
+        const newAuthors = [...authors];
+        newAuthors[index] = value;
+        setAuthors(newAuthors);
+    };
+
+    const handleRemoveAuthor = (index: number) => {
+        const newAuthors = [...authors];
+        newAuthors.splice(index, 1);
+        setAuthors(newAuthors);
+    };
+
+    const addAuthorField = () => {
+        setAuthors([...authors, '']);
     };
 
     return (
@@ -29,7 +48,10 @@ const AddBookForm = () => {
                 <Label>Book Title:</Label>
                 <Input
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                        setIsDisabled(e.target.value.length >= 3);
+                    }}
                 />
             </div>
 
@@ -55,15 +77,22 @@ const AddBookForm = () => {
             <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
                     <Label>Author/s:</Label>
-                    <Button variant="outline"><small>Add more author</small></Button>
                 </div>
-                <Input
-                    value={authors}
-                    onChange={(e) => setAuthor([e.target.value])}
-                />
+                {authors.map((author, index = 1) => (
+                    <div className="flex gap-2">
+                        <Input
+                            key={index}
+                            value={author}
+                            onChange={(e) => handleAddAuthor(index, e.target.value)}
+                        />
+                        <Button variant="destructive" type="button" onClick={() => handleRemoveAuthor(index)}><X size={16} /></Button>
+                    </div>
+                ))}
+
+                <Button variant="outline" type="button" onClick={addAuthorField}><small>Add more author</small></Button>
             </div>
 
-            <Button type="submit" >Submit</Button>
+            <Button type="submit" disabled={isDisabled} >Submit</Button>
             <DrawerFooter className="p-0">
                 <DrawerClose>
                     <Button type="button" variant="ghost">Cancel</Button>

@@ -6,9 +6,20 @@ import Navbar from "@/components/custom/nav";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { useBooks } from "@/hooks/books.hooks";
 import { Book } from "@/types/books.types";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const books = useBooks();
+  // const [books, setBooks] = useState<Book[]>([]);
+
+  // useEffect(() => {
+  //   setBooks(fetchedBooks);
+  // }, [fetchedBooks]);
+
+  const handleAddBook = (book: Book) => {
+    // setBooks((prevBooks) => [...prevBooks, book]);
+  };
 
   return (
     <ThemeProvider
@@ -17,17 +28,20 @@ export default function Home() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className="bg-background relative lg:w-[420px] px-4 pt-24 min-h-screen h-fi">
-        <Navbar />
+      <main className="bg-background relative lg:w-[420px] pt-24 h-screen">
+        <div className="bg-white h-fit px-4 ">
+          <Navbar />
 
 
-        <div className="grid grid-cols-2 mt-3 gap-5">
-          {books.map((book: Book, index: number) => (
-            <BookCard key={index} book={book} />
-          ))}
+          <div className="grid grid-cols-2 mt-3 gap-5">
+            {books.map((book: Book, index: number) => (
+              <BookCard key={index} book={book} />
+            ))}
+          </div>
+
+
+          <AddButton onAddBook={handleAddBook} />
         </div>
-
-        <AddButton />
       </main>
     </ThemeProvider>
   );

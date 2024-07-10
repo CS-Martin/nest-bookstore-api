@@ -1,4 +1,6 @@
 import { Book } from '@/types/books.types';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 class BookService {
 	private API_BASE_URL: string;
@@ -8,6 +10,8 @@ class BookService {
 	}
 
 	public async createBook(book: Book): Promise<void> {
+		noStore();
+
 		try {
 			const response = await fetch(this.API_BASE_URL, {
 				method: 'POST',

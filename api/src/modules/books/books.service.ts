@@ -31,6 +31,7 @@ export class BooksService {
      * @return {CreateBookDto} The created book.
      */
     create(bookData: CreateBookDto): CreateBookDto {
+        console.log(bookData);
         const existingBook = this.findByName(bookData.title);
 
         if (existingBook) {
@@ -66,6 +67,7 @@ export class BooksService {
 
             return newBook;
         } catch (error) {
+            this.logger.error(`Failed to create book ${bookData}`, error);
             throw new Error(`Failed to create book ${bookData.title}`);
         }
     }

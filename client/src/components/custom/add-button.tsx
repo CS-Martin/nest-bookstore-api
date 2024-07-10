@@ -13,8 +13,9 @@ import {
 import AddBookForm from "./forms/add-book-form"
 import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
+import { Book } from "@/types/books.types"
 
-const AddButton = () => {
+const AddButton = ({ onAddBook }: { onAddBook: (book: Book) => void }) => {
     return (
         <Drawer>
             <DrawerTrigger className="fixed ms-[73%] sm:ms-[85%] md:ms-80 z-50 bottom-10 p-4 rounded-full bg-blue-500 shadow-xl">
@@ -28,7 +29,7 @@ const AddButton = () => {
                 </DrawerHeader>
 
                 <ScrollArea className="overflow-y-auto">
-                    <AddBookForm />
+                    <AddBookForm onAddBook={onAddBook} />
                 </ScrollArea>
             </DrawerContent>
         </Drawer>
