@@ -1,26 +1,95 @@
-import { Injectable } from '@nestjs/common';
+import {
+    Inject,
+    Injectable,
+    Logger,
+    NotFoundException,
+    forwardRef,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { BookDbLibService } from 'src/lib/book-db-lib/book-db-lib.service';
 
 @Injectable()
 export class BookService {
+    private readonly logger = new Logger(BookService.name);
+
+    constructor(
+        @Inject(forwardRef(() => BookDbLibService))
+        private readonly bookDbLibService: BookDbLibService,
+    ) {}
+
     create(createBookDto: CreateBookDto) {
-        return 'This action adds a new book';
-    }
+        const existingBook = this.findOne(createBookDto.id);
 
-    findAll() {
-        return `This action returns all book`;
-    }
+        if (existingBook) {
+            throw new NotFoundException('Book already exists');
+        }
 
-    findOne(id: number) {
-        return `This action returns a #${id} book`;
+        try {
+            const newBook = {
+                id: this.generateId(),
+                ...createBookDto,
+            };
+
+            this.bookDbLibService.createBook(newBook);
+            return newBook;
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error(`Error creating book: ${createBookDto.title}`);
+        }
     }
 
     update(id: number, updateBookDto: UpdateBookDto) {
-        return `This action updates a #${id} book`;
+        const existingBook = this.findOne(id);
+
+        if (!existingBook) {
+            throw new NotFoundException('Book not found');
+        }
+
+        try {
+            const bookToUpdateDto = {
+                ...existingBook,
+                ...updateBookDto,
+            };
+
+            this.bookDbLibService.updateBook(bookToUpdateDto);
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error(`Error updating book: ${updateBookDto.title}`);
+        }
     }
 
     remove(id: number) {
-        return `This action removes a #${id} book`;
+        const bookToDelete = this.findOne(id);
+
+        if (!bookToDelete) {
+            throw new NotFoundException('Book not found');
+        }
+
+        try {
+            this.bookDbLibService.deleteBook(bookToDelete);
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error(`Error deleting book: ${bookToDelete.title}`);
+        }
+    }
+
+    findAll() {
+        return this.bookDbLibService.getAllBooks();
+    }
+
+    findOne(id: number) {
+        const book = this.bookDbLibService.getBook(id);
+
+        if (!book) {
+            throw new NotFoundException('Book not found');
+        }
+
+        return book;
+    }
+
+    private generateId(): number {
+        const booksArrayLength = this.bookDbLibService.BooksArray.length;
+        return booksArrayLength > 0 ? booksArrayLength + 1 : 0;
     }
 }
