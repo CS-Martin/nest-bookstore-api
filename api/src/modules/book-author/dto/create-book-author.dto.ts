@@ -1,1 +1,4 @@
-export class CreateBookAuthorDto {}
+export class CreateBookAuthorDto {
+    bookId: number;
+    authorId: number;
+}

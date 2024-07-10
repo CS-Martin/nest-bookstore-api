@@ -8,6 +8,8 @@ import {
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
+import { AuthorService } from '../author/author.service';
+import { BookAuthorService } from '../book-author/book-author.service';
 
 @Injectable()
 export class BookService {
@@ -16,6 +18,10 @@ export class BookService {
     constructor(
         @Inject(forwardRef(() => BookDbLibService))
         private readonly bookDbLibService: BookDbLibService,
+        @Inject(forwardRef(() => AuthorService))
+        private readonly authorService: AuthorService,
+        @Inject(forwardRef(() => BookAuthorService))
+        private readonly bookAuthorService: BookAuthorService,
     ) {}
 
     create(createBookDto: CreateBookDto) {
@@ -33,11 +39,39 @@ export class BookService {
                 ...createBookDto,
             };
 
+            if (newBook.authors.length > 0) {
+                newBook.authors.forEach((author) => {
+                    this.authorService.createBookAuthorRelationship(
+                        newBook.id,
+                        author,
+                    );
+                });
+            }
+
             this.bookDbLibService.createBook(newBook);
             return newBook;
         } catch (error) {
             this.logger.error(error);
             throw new Error(`Error creating book: ${createBookDto.title}`);
+        }
+    }
+
+    createBookAuthorRelationship(authorId: number, book: string) {
+        try {
+            const createdBook: CreateBookDto = this.create({
+                title: book,
+                description: '',
+                isbn: '',
+                authors: [],
+            });
+
+            this.bookAuthorService.create({
+                bookId: createdBook.id,
+                authorId: authorId,
+            });
+        } catch (error) {
+            this.logger.error(error);
+            throw new Error(`Error creating book author relationship: ${book}`);
         }
     }
 

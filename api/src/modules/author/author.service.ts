@@ -10,6 +10,8 @@ import {
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
+import { BookAuthorService } from '../book-author/book-author.service';
+import { BookService } from '../book/book.service';
 
 @Injectable()
 export class AuthorService {
@@ -18,6 +20,10 @@ export class AuthorService {
     constructor(
         @Inject(forwardRef(() => AuthorDbLibService))
         private authorDbLibService: AuthorDbLibService,
+        @Inject(forwardRef(() => BookService))
+        private bookService: BookService,
+        @Inject(forwardRef(() => BookAuthorService))
+        private bookAuthorService: BookAuthorService,
     ) {}
 
     create(createAuthorDto: CreateAuthorDto) {
@@ -32,13 +38,42 @@ export class AuthorService {
         try {
             const newAuthor = {
                 id: this.generateAuthorId(),
-                name: createAuthorDto.name,
+                ...createAuthorDto,
             };
 
             this.authorDbLibService.createAuthor(newAuthor);
+
+            if (newAuthor.books.length > 0) {
+                newAuthor.books.forEach((book) => {
+                    this.bookService.createBookAuthorRelationship(
+                        newAuthor.id,
+                        book,
+                    );
+                });
+            }
+
+            return newAuthor;
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error creating author');
+        }
+    }
+
+    createBookAuthorRelationship(bookId: number, newAuthor: string) {
+        try {
+            const createdAuthor: CreateAuthorDto = this.create({
+                name: newAuthor,
+            });
+
+            this.bookAuthorService.create({
+                bookId,
+                authorId: createdAuthor.id,
+            });
+        } catch (error) {
+            this.logger.error(error);
+            throw new InternalServerErrorException(
+                `Error creating author ${newAuthor}`,
+            );
         }
     }
 

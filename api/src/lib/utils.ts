@@ -21,7 +21,7 @@ export const loadAuthors = () => {
     }
 };
 
-export const loadAuthorsAndBooks = () => {
+export const loadBooksAndAuthors = () => {
     try {
         const data = fs.readFileSync('data/data.json', 'utf-8');
         return JSON.parse(data).authors_and_books;
