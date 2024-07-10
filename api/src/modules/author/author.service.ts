@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import { AuthorDbLibService } from 'src/lib/author-db-lib/author-db-lib.service';
+import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 
 @Injectable()
 export class AuthorService {

@@ -1,5 +1,5 @@
+import { CreateBookDto } from './../../modules/book/dto/create-book.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateBookDto } from 'src/modules/book/dto/create-book.dto';
 import { loadBooks } from '../utils';
 
 @Injectable()

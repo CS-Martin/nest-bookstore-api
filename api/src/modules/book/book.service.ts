@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { BookDbLibService } from 'src/lib/book-db-lib/book-db-lib.service';
+import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
 
 @Injectable()
 export class BookService {
