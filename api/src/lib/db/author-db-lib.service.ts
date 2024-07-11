@@ -1,10 +1,7 @@
 import { AuthorDto } from 'src/modules/author/dto/create-author.dto';
 import { loadAuthors } from '../utils';
 
-import { Logger } from '@nestjs/common';
-
 export class AuthorDbLibService {
-    private logger = new Logger(AuthorDbLibService.name);
     private AuthorsArray: AuthorDto[] = loadAuthors();
 
     createAuthor(createAuthorDto: AuthorDto): void {
@@ -24,7 +21,6 @@ export class AuthorDbLibService {
     }
 
     getAllAuthors(): AuthorDto[] {
-        this.logger.log(`Getting all authors: ${this.AuthorsArray}`);
         return this.AuthorsArray;
     }
 

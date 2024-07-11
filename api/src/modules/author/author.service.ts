@@ -32,7 +32,8 @@ export class AuthorService {
         );
 
         if (existingAuthor) {
-            throw new ConflictException('Author already exists');
+            this.logger.log(`Author ${createAuthorDto.name} already exists`);
+            return existingAuthor;
         }
 
         try {

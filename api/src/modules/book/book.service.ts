@@ -33,7 +33,8 @@ export class BookService {
         );
 
         if (existingBook) {
-            throw new NotFoundException('Book already exists');
+            this.logger.log(`Book ${createBookDto.title} already exists`);
+            return existingBook;
         }
 
         try {
