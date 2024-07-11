@@ -53,6 +53,8 @@ export class BookService {
                     newBook.id,
                     createBookDto.authors,
                 );
+            } else {
+                this.bookAuthorService.createBookOnly(newBook.id);
             }
 
             /**

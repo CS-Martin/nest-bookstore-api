@@ -25,7 +25,7 @@ export class AuthorDbLibService {
     }
 
     getAuthor(id: number): AuthorDto | undefined {
-        return this.AuthorsArray.find((author) => author.id === id);
+        return this.AuthorsArray[id - 1];
     }
 
     getAuthorByName(name: string): AuthorDto | undefined {

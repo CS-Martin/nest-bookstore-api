@@ -60,6 +60,24 @@ export class BookAuthorService {
         }
     }
 
+    // What about those created books that has no author/s?
+    createBookOnly(bookId: number) {
+        this.bookAuthorDbLibService.createBookAuthorRelationship({
+            id: this.getBooksAndAuthorsLength(),
+            book_id: bookId,
+            author_id: null,
+        });
+    }
+
+    // What about those created authors that has no book/s?
+    createAuthorOnly(authorId: number) {
+        this.bookAuthorDbLibService.createBookAuthorRelationship({
+            id: this.getBooksAndAuthorsLength(),
+            book_id: null,
+            author_id: authorId,
+        });
+    }
+
     findAllBooksAndAuthors() {
         const bookAuthorRelationships =
             this.bookAuthorDbLibService.getAllBookAuthor();

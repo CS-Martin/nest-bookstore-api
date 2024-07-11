@@ -27,7 +27,7 @@ export class BookDbLibService {
     }
 
     getBook(id: number): BookDto | undefined {
-        return this.BooksArray.find((book) => book.id === id);
+        return this.BooksArray[id - 1];
     }
 
     getBookByTitle(title: string): BookDto | undefined {

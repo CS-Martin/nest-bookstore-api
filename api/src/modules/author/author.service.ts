@@ -7,7 +7,7 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
-import { AuthorDto, CreateAuthorDto } from './dto/create-author.dto';
+import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 import { BookAuthorService } from '../book-author/book-author.service';
@@ -52,6 +52,8 @@ export class AuthorService {
                     newAuthor.id,
                     createAuthorDto.books,
                 );
+            } else {
+                this.bookAuthorService.createAuthorOnly(newAuthor.id);
             }
 
             return {
