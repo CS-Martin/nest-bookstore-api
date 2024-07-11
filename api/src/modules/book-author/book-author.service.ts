@@ -43,10 +43,11 @@ export class BookAuthorService {
 
         // Proceed with creating the book-author relationship
         try {
-            this.bookAuthorDbLibService.createBookAuthorRelationship(
-                bookId,
-                authorId,
-            );
+            this.bookAuthorDbLibService.createBookAuthorRelationship({
+                id: this.getBooksAndAuthorsLength(),
+                book_id: bookId,
+                author_id: authorId,
+            });
 
             this.logger.log(
                 `Book-author relationship created successfully for book ID ${bookId} and author ID ${authorId}`,
@@ -86,5 +87,10 @@ export class BookAuthorService {
 
     removeAuthor(authorId: number) {
         this.bookAuthorDbLibService.deleteAuthor(authorId);
+    }
+
+    private getBooksAndAuthorsLength() {
+        const length = this.bookAuthorDbLibService.getBooksAndAuthorsLength();
+        return length > 0 ? length + 1 : 0;
     }
 }

@@ -4,8 +4,8 @@ import { loadBooksAndAuthors } from '../utils';
 export class BookAuthorDbLibService {
     private BookAuthorArray: BookAuthorDto[] = loadBooksAndAuthors();
 
-    createBookAuthorRelationship(bookId: number, authorId: number) {
-        this.BookAuthorArray.push({ book_id: bookId, author_id: authorId });
+    createBookAuthorRelationship(bookAuthorDto: BookAuthorDto) {
+        this.BookAuthorArray.push(bookAuthorDto);
     }
 
     getAllBookAuthor() {
@@ -22,5 +22,9 @@ export class BookAuthorDbLibService {
         this.BookAuthorArray = this.BookAuthorArray.filter(
             (author) => author.author_id !== authorId,
         );
+    }
+
+    getBooksAndAuthorsLength() {
+        return this.BookAuthorArray.length;
     }
 }

@@ -44,7 +44,9 @@ export class BookService {
                 isbn: createBookDto.isbn,
             };
 
+            this.logger.log(`Creating book ${newBook.title}`);
             this.bookDbLibService.createBook(newBook);
+            this.logger.log(`Book ${newBook.title} successfully created`);
 
             if (createBookDto.authors.length > 0) {
                 this.authorService.createBookAuthorRelationship(
@@ -55,7 +57,10 @@ export class BookService {
 
             return newBook;
         } catch (error) {
-            this.logger.error(error);
+            this.logger.error(
+                `Error creating book: ${createBookDto.title}`,
+                error.stack,
+            );
             throw new Error(`Error creating book: ${createBookDto.title}`);
         }
     }
@@ -70,10 +75,16 @@ export class BookService {
                     authors: [],
                 });
 
+                this.logger.log(
+                    `Creating book-author relationship for book ${createdBook.title} and author ${authorId}`,
+                );
                 this.bookAuthorService.create(createdBook.id, authorId);
             });
         } catch (error) {
-            this.logger.error(error);
+            this.logger.error(
+                `Error creating book author relationship: ${book}`,
+                error.stack,
+            );
             throw new Error(`Error creating book author relationship: ${book}`);
         }
     }
@@ -91,9 +102,16 @@ export class BookService {
                 ...updateBookDto,
             };
 
+            this.logger.log(`Updating book ${bookToUpdateDto.title}`);
             this.bookDbLibService.updateBook(bookToUpdateDto);
+            this.logger.log(
+                `Book ${bookToUpdateDto.title} successfully updated`,
+            );
         } catch (error) {
-            this.logger.error(error);
+            this.logger.error(
+                `Error updating book: ${updateBookDto.title}`,
+                error.stack,
+            );
             throw new Error(`Error updating book: ${updateBookDto.title}`);
         }
     }
@@ -106,12 +124,19 @@ export class BookService {
         }
 
         try {
+            this.logger.log(`Deleting book ${bookToDelete.title}`);
             this.bookDbLibService.deleteBook(bookToDelete);
+            this.logger.log(`Book ${bookToDelete.title} successfully deleted`);
 
+            this.logger.log(`Deleting book-author relationship`);
             // If a book is deleted, also delete the book-author relationship
             this.bookAuthorService.removeBook(bookToDelete.id);
+            this.logger.log(`Book-author relationship successfully deleted`);
         } catch (error) {
-            this.logger.error(error);
+            this.logger.error(
+                `Error deleting book: ${bookToDelete.title}`,
+                error.stack,
+            );
             throw new Error(`Error deleting book: ${bookToDelete.title}`);
         }
     }
