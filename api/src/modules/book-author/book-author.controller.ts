@@ -5,6 +5,7 @@ import { BookAuthorService } from './book-author.service';
 export class BookAuthorController {
     constructor(private readonly bookAuthorService: BookAuthorService) {}
 
+    // For testing purposes
     @Get()
     findAll() {
         return this.bookAuthorService.findAllBooksAndAuthors();
