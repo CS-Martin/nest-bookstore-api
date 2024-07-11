@@ -10,7 +10,6 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
 import { AuthorService } from '../author/author.service';
 import { BookAuthorService } from '../book-author/book-author.service';
-import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 
 @Injectable()
 export class BookService {
@@ -23,8 +22,6 @@ export class BookService {
         private readonly authorService: AuthorService,
         @Inject(forwardRef(() => BookAuthorService))
         private readonly bookAuthorService: BookAuthorService,
-        @Inject(forwardRef(() => AuthorDbLibService))
-        private readonly authorDbLibService: AuthorDbLibService,
     ) {}
 
     create(createBookDto: CreateBookDto) {
