@@ -8,11 +8,14 @@ import {
     Delete,
     ValidationPipe,
     ParseIntPipe,
+    UseFilters,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { HttpExceptionFilter } from 'src/exception-filters/http-exception.filters';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('book')
 export class BookController {
     constructor(private readonly bookService: BookService) {}
