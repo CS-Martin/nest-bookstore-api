@@ -52,8 +52,6 @@ export class AuthorService {
                     newAuthor.id,
                     createAuthorDto.books,
                 );
-            } else {
-                this.bookAuthorService.createAuthorOnly(newAuthor.id);
             }
 
             return {

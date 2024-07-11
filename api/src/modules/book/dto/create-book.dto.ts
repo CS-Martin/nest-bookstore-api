@@ -23,9 +23,9 @@ export class CreateBookDto {
 
     @IsArray()
     @IsString({ each: true })
-    @IsOptional()
     @MinLength(3, { each: true })
-    authors?: string[];
+    // @MinLength(1)
+    authors: string[];
 }
 
 export class BookDto extends OmitType(CreateBookDto, ['authors'] as const) {

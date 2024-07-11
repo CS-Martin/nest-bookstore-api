@@ -60,23 +60,27 @@ export class BookAuthorService {
         }
     }
 
+    /**
+     * @todo: Should I also save the books and authors that has no relationship?
+     * Example: Books that has no author/s and authors that has no book/s
+     */
     // What about those created books that has no author/s?
-    createBookOnly(bookId: number) {
-        this.bookAuthorDbLibService.createBookAuthorRelationship({
-            id: this.getBooksAndAuthorsLength(),
-            book_id: bookId,
-            author_id: null,
-        });
-    }
+    // createBookOnly(bookId: number) {
+    //     this.bookAuthorDbLibService.createBookAuthorRelationship({
+    //         id: this.getBooksAndAuthorsLength(),
+    //         book_id: bookId,
+    //         author_id: null,
+    //     });
+    // }
 
     // What about those created authors that has no book/s?
-    createAuthorOnly(authorId: number) {
-        this.bookAuthorDbLibService.createBookAuthorRelationship({
-            id: this.getBooksAndAuthorsLength(),
-            book_id: null,
-            author_id: authorId,
-        });
-    }
+    // createAuthorOnly(authorId: number) {
+    //     this.bookAuthorDbLibService.createBookAuthorRelationship({
+    //         id: this.getBooksAndAuthorsLength(),
+    //         book_id: null,
+    //         author_id: authorId,
+    //     });
+    // }
 
     findAllBooksAndAuthors() {
         const bookAuthorRelationships =
