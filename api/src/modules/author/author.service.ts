@@ -54,7 +54,10 @@ export class AuthorService {
                 );
             }
 
-            return newAuthor;
+            return {
+                message: 'Author created successfully',
+                newAuthor,
+            };
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error creating author');
@@ -64,18 +67,17 @@ export class AuthorService {
     createBookAuthorRelationship(bookId: number, newAuthor: string[]) {
         try {
             newAuthor.forEach((author) => {
-                const createdAuthor: AuthorDto = this.create({
+                const createdAuthor = this.create({
                     name: author,
                     books: [],
                 });
 
-                console.log('check', createdAuthor);
-
                 this.logger.log(`Creating book-author relationship`);
-                this.bookAuthorService.create(bookId, createdAuthor.id);
+                this.bookAuthorService.create(
+                    bookId,
+                    createdAuthor.newAuthor.id,
+                );
             });
-
-            console.log(this.findAll());
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException(
@@ -102,6 +104,11 @@ export class AuthorService {
             this.logger.log(
                 `Author ${updatedAuthor.name} successfully updated`,
             );
+
+            return {
+                message: 'Author updated successfully',
+                updatedAuthor,
+            };
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error updating author');
@@ -124,6 +131,11 @@ export class AuthorService {
             this.logger.log(
                 `Author ${existingAuthor.name} successfully deleted`,
             );
+
+            return {
+                message: 'Author deleted successfully',
+                existingAuthor,
+            };
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error deleting author');

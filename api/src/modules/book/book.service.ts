@@ -55,7 +55,13 @@ export class BookService {
                 );
             }
 
-            return newBook;
+            /**
+             * Maybe the message can be used in client side to show a success message(?)
+             */
+            return {
+                message: 'Book created successfully',
+                newBook,
+            };
         } catch (error) {
             this.logger.error(
                 `Error creating book: ${createBookDto.title}`,
@@ -68,7 +74,7 @@ export class BookService {
     createBookAuthorRelationship(authorId: number, book: string[]) {
         try {
             book.forEach((book) => {
-                const createdBook: BookDto = this.create({
+                const createdBook = this.create({
                     title: book,
                     description: '',
                     isbn: '',
@@ -76,9 +82,9 @@ export class BookService {
                 });
 
                 this.logger.log(
-                    `Creating book-author relationship for book ${createdBook.title} and author ${authorId}`,
+                    `Creating book-author relationship for book ${createdBook.newBook.title} and author ${authorId}`,
                 );
-                this.bookAuthorService.create(createdBook.id, authorId);
+                this.bookAuthorService.create(createdBook.newBook.id, authorId);
             });
         } catch (error) {
             this.logger.error(
@@ -107,6 +113,11 @@ export class BookService {
             this.logger.log(
                 `Book ${bookToUpdateDto.title} successfully updated`,
             );
+
+            return {
+                message: 'Book updated successfully',
+                bookToUpdateDto,
+            };
         } catch (error) {
             this.logger.error(
                 `Error updating book: ${updateBookDto.title}`,
@@ -132,6 +143,11 @@ export class BookService {
             // If a book is deleted, also delete the book-author relationship
             this.bookAuthorService.removeBook(bookToDelete.id);
             this.logger.log(`Book-author relationship successfully deleted`);
+
+            return {
+                message: 'Book deleted successfully',
+                bookToDelete,
+            };
         } catch (error) {
             this.logger.error(
                 `Error deleting book: ${bookToDelete.title}`,
