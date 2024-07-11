@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { BooksModule } from './modules/books/books.module';
-import { AuthorsModule } from './modules/authors/authors.module';
-import { SharedModule } from './modules/shared-module.module';
+import { BookModule } from './modules/book/book.module';
+import { AuthorModule } from './modules/author/author.module';
 
 @Module({
-    imports: [BooksModule, AuthorsModule, SharedModule],
+    imports: [BookModule, AuthorModule],
     controllers: [],
     providers: [],
 })

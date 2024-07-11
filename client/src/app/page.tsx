@@ -32,7 +32,6 @@ export default function Home() {
         <div className="bg-white h-fit px-4 ">
           <Navbar />
 
-
           <div className="grid grid-cols-2 mt-3 gap-5">
             {books.map((book: Book, index: number) => (
               <BookCard key={index} book={book} />

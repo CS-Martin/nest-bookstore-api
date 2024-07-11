@@ -1,14 +1,35 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { BooksDbService } from '../lib/books-db-lib/books-db-lib.service';
-import { AuthorsDbService } from '../lib/authors-db-lib/authors-db-lib.service';
-import { BooksService } from './books/books.service';
-import { AuthorsService } from './authors/authors.service';
-import { BooksModule } from './books/books.module';
-import { AuthorsModule } from './authors/authors.module';
+import { Module, forwardRef } from '@nestjs/common';
+import { BookModule } from './book/book.module';
+import { AuthorModule } from './author/author.module';
+import { BookService } from './book/book.service';
+import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
+import { AuthorService } from './author/author.service';
+import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
+import { BookAuthorModule } from './book-author/book-author.module';
+import { BookAuthorService } from './book-author/book-author.service';
+import { BookAuthorDbLibService } from 'src/lib/db/book-author-db-lib.service';
 
 @Module({
-    imports: [forwardRef(() => BooksModule), forwardRef(() => AuthorsModule)],
-    providers: [BooksService, BooksDbService, AuthorsService, AuthorsDbService],
-    exports: [BooksService, BooksDbService, AuthorsService, AuthorsDbService],
+    imports: [
+        forwardRef(() => BookModule),
+        forwardRef(() => AuthorModule),
+        forwardRef(() => BookAuthorModule),
+    ],
+    providers: [
+        BookService,
+        BookDbLibService,
+        AuthorService,
+        AuthorDbLibService,
+        BookAuthorService,
+        BookAuthorDbLibService,
+    ],
+    exports: [
+        BookService,
+        BookDbLibService,
+        AuthorService,
+        AuthorDbLibService,
+        BookAuthorService,
+        BookAuthorDbLibService,
+    ],
 })
 export class SharedModule {}

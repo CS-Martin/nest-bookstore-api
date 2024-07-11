@@ -6,38 +6,33 @@ import {
     Patch,
     Param,
     Delete,
-    ParseIntPipe,
     ValidationPipe,
+    ParseIntPipe,
     UseFilters,
 } from '@nestjs/common';
-import { AuthorsService } from './authors.service';
+import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { HttpExceptionFilter } from 'src/exception-filters/http-exception.filters';
 
 @UseFilters(HttpExceptionFilter)
-@Controller('authors')
-export class AuthorsController {
-    constructor(private readonly authorsService: AuthorsService) {}
+@Controller('author')
+export class AuthorController {
+    constructor(private readonly authorService: AuthorService) {}
 
     @Post()
     create(@Body(new ValidationPipe()) createAuthorDto: CreateAuthorDto) {
-        return this.authorsService.create(createAuthorDto);
+        return this.authorService.create(createAuthorDto);
     }
 
     @Get()
     findAll() {
-        return this.authorsService.findAll();
+        return this.authorService.findAll();
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.authorsService.findOneWithBooksName(id);
-    }
-
-    @Get('name/:name')
-    findByName(@Param('name') name: string) {
-        return this.authorsService.findByName(name);
+        return this.authorService.findOne(+id);
     }
 
     @Patch(':id')
@@ -45,11 +40,11 @@ export class AuthorsController {
         @Param('id', ParseIntPipe) id: number,
         @Body(new ValidationPipe()) updateAuthorDto: UpdateAuthorDto,
     ) {
-        return this.authorsService.update(id, updateAuthorDto);
+        return this.authorService.update(+id, updateAuthorDto);
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
-        return this.authorsService.remove(id);
+        return this.authorService.remove(+id);
     }
 }

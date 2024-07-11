@@ -3,7 +3,7 @@ import { Book as BookCardProps } from "@/types/books.types";
 import { Playpen_Sans } from "next/font/google";
 import Image from "next/image";
 
-const playpenSans = Playpen_Sans({ subsets: ['latin'] });
+const playpenSans = Playpen_Sans({ subsets: ["latin"] });
 
 const BookCard: React.FC<{ book: BookCardProps }> = ({ book }) => {
   return (
@@ -18,11 +18,12 @@ const BookCard: React.FC<{ book: BookCardProps }> = ({ book }) => {
           className="object-cover h-[280px] w-auto rounded-md "
         />
 
-
-        <CardTitle className="text-[16px] font-semibold">{book.title}</CardTitle>
-        <small style={{ marginTop: "0px" }} className="truncate text-gray-500">by {book.authors.map((author) => author).join(" & ")}</small>
-
-
+        <CardTitle className="text-[16px] font-semibold">
+          {book.title}
+        </CardTitle>
+        <small style={{ marginTop: "0px" }} className="truncate text-gray-500">
+          by {book.authors.map((author) => author).join(" & ")}
+        </small>
       </CardHeader>
     </Card>
   );
