@@ -24,7 +24,6 @@ export class CreateBookDto {
     @IsArray()
     @IsString({ each: true })
     @MinLength(3, { each: true })
-    // @MinLength(1)
     authors: string[];
 }
 
