@@ -26,6 +26,7 @@ export class BookAuthorService {
     create(bookId: number, authorId: number) {
         // Verify if the book exists
         const book = this.bookService.findOne(bookId);
+
         if (!book) {
             throw new NotFoundException(
                 `Book with ID ${bookId} not found during book-author relationship creation`,
@@ -65,7 +66,7 @@ export class BookAuthorService {
         // Map to store books with their authors
         const booksMap = new Map<number, any>();
 
-        bookAuthorRelationships.map(async (relationship) => {
+        bookAuthorRelationships.forEach(async (relationship) => {
             const book = this.bookService.findOne(relationship.book_id);
             const author = this.authorService.findOne(relationship.author_id);
 
@@ -79,7 +80,11 @@ export class BookAuthorService {
         return Array.from(booksMap.values());
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} bookAuthor`;
+    removeBook(bookId: number) {
+        this.bookAuthorDbLibService.deleteBook(bookId);
+    }
+
+    removeAuthor(authorId: number) {
+        this.bookAuthorDbLibService.deleteAuthor(authorId);
     }
 }

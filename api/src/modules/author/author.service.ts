@@ -32,8 +32,9 @@ export class AuthorService {
         );
 
         if (existingAuthor) {
-            this.logger.log(`Author ${createAuthorDto.name} already exists`);
-            return existingAuthor;
+            throw new ConflictException(
+                `Author ${createAuthorDto.name} already exists`,
+            );
         }
 
         try {
@@ -42,7 +43,9 @@ export class AuthorService {
                 name: createAuthorDto.name,
             };
 
+            this.logger.log(`Creating author ${newAuthor.name}`);
             this.authorDbLibService.createAuthor(newAuthor);
+            this.logger.log(`Author ${newAuthor.name} created`);
 
             if (createAuthorDto.books) {
                 this.bookService.createBookAuthorRelationship(
@@ -68,6 +71,7 @@ export class AuthorService {
 
                 console.log('check', createdAuthor);
 
+                this.logger.log(`Creating book-author relationship`);
                 this.bookAuthorService.create(bookId, createdAuthor.id);
             });
 
@@ -93,7 +97,11 @@ export class AuthorService {
                 ...updateAuthorDto,
             };
 
+            this.logger.log(`Updating author ${updatedAuthor.name}`);
             this.authorDbLibService.updateAuthor(updatedAuthor);
+            this.logger.log(
+                `Author ${updatedAuthor.name} successfully updated`,
+            );
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error updating author');
@@ -109,6 +117,13 @@ export class AuthorService {
 
         try {
             this.authorDbLibService.deleteAuthor(existingAuthor);
+
+            // If an author is deleted, also delete the book-author relationship
+            this.logger.log(`Deleting book-author relationship`);
+            this.bookAuthorService.removeAuthor(existingAuthor.id);
+            this.logger.log(
+                `Author ${existingAuthor.name} successfully deleted`,
+            );
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException('Error deleting author');

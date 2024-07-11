@@ -1,4 +1,5 @@
 import {
+    ConflictException,
     Inject,
     Injectable,
     Logger,
@@ -30,8 +31,9 @@ export class BookService {
         );
 
         if (existingBook) {
-            this.logger.log(`Book ${createBookDto.title} already exists`);
-            return existingBook;
+            throw new ConflictException(
+                `Book ${createBookDto.title} already exists`,
+            );
         }
 
         try {
@@ -105,6 +107,9 @@ export class BookService {
 
         try {
             this.bookDbLibService.deleteBook(bookToDelete);
+
+            // If a book is deleted, also delete the book-author relationship
+            this.bookAuthorService.removeBook(bookToDelete.id);
         } catch (error) {
             this.logger.error(error);
             throw new Error(`Error deleting book: ${bookToDelete.title}`);

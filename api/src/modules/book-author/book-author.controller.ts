@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { BookAuthorService } from './book-author.service';
 
 @Controller('book-author')
@@ -10,8 +10,8 @@ export class BookAuthorController {
         return this.bookAuthorService.findAllBooksAndAuthors();
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.bookAuthorService.findOne(+id);
+    @Delete(':id')
+    remove(@Param('id') id: number) {
+        return this.bookAuthorService.removeBook(id);
     }
 }
