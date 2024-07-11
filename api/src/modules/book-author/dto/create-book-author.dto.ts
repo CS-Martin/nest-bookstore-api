@@ -1,4 +1,4 @@
 export class CreateBookAuthorDto {
-    bookId: number;
-    authorId: number;
+    book_id: number;
+    author_id: number;
 }

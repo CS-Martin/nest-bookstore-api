@@ -4,7 +4,11 @@ import { loadBooksAndAuthors } from '../utils';
 export class BookAuthorDbLibService {
     private BookAuthorArray: CreateBookAuthorDto[] = loadBooksAndAuthors();
 
-    createBookAuthorRelationship(bookId: number, authorId: number) {
-        this.BookAuthorArray.push({ bookId, authorId });
+    createBookAuthorRelationship(book_id: number, author_id: number) {
+        this.BookAuthorArray.push({ book_id, author_id });
+    }
+
+    getAllBookAuthor() {
+        return this.BookAuthorArray;
     }
 }
