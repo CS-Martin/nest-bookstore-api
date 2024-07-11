@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookAuthorDto } from './dto/create-book-author.dto';
 import { UpdateBookAuthorDto } from './dto/update-book-author.dto';
 
 @Injectable()
 export class BookAuthorService {
-    create(createBookAuthorDto: CreateBookAuthorDto) {
-        return 'This action adds a new bookAuthor';
+    create(bookId: number, authorId: number) {
+        console.log(bookId, authorId);
     }
 
     findAll() {

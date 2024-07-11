@@ -1,17 +1,22 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { AuthorController } from './author.controller';
-import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
-import { BookAuthorService } from '../book-author/book-author.service';
-import { BookService } from '../book/book.service';
+import { SharedModule } from '../shared-module.module';
 
 @Module({
+    imports: [forwardRef(() => SharedModule)],
     controllers: [AuthorController],
-    providers: [
-        AuthorService,
-        AuthorDbLibService,
-        BookAuthorService,
-        BookService,
-    ],
+    providers: [AuthorService],
+    exports: [AuthorService],
+
+    // imports: [forwardRef(() => BookModule)],
+    // controllers: [AuthorController],
+    // providers: [
+    //     AuthorService,
+    //     AuthorDbLibService,
+    //     BookAuthorService,
+    //     BookService,
+    //     BookDbLibService,
+    // ],
 })
 export class AuthorModule {}

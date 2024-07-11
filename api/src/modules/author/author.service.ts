@@ -7,7 +7,7 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
-import { CreateAuthorDto } from './dto/create-author.dto';
+import { AuthorDto, CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 import { BookAuthorService } from '../book-author/book-author.service';
@@ -38,18 +38,16 @@ export class AuthorService {
         try {
             const newAuthor = {
                 id: this.generateAuthorId(),
-                ...createAuthorDto,
+                name: createAuthorDto.name,
             };
 
             this.authorDbLibService.createAuthor(newAuthor);
 
-            if (newAuthor.books.length > 0) {
-                newAuthor.books.forEach((book) => {
-                    this.bookService.createBookAuthorRelationship(
-                        newAuthor.id,
-                        book,
-                    );
-                });
+            if (createAuthorDto.books) {
+                this.bookService.createBookAuthorRelationship(
+                    newAuthor.id,
+                    createAuthorDto.books,
+                );
             }
 
             return newAuthor;
@@ -59,16 +57,20 @@ export class AuthorService {
         }
     }
 
-    createBookAuthorRelationship(bookId: number, newAuthor: string) {
+    createBookAuthorRelationship(bookId: number, newAuthor: string[]) {
         try {
-            const createdAuthor: CreateAuthorDto = this.create({
-                name: newAuthor,
+            newAuthor.forEach((author) => {
+                const createdAuthor: AuthorDto = this.create({
+                    name: author,
+                    books: [],
+                });
+
+                console.log('check', createdAuthor);
+
+                this.bookAuthorService.create(bookId, createdAuthor.id);
             });
 
-            this.bookAuthorService.create({
-                bookId,
-                authorId: createdAuthor.id,
-            });
+            console.log(this.findAll());
         } catch (error) {
             this.logger.error(error);
             throw new InternalServerErrorException(

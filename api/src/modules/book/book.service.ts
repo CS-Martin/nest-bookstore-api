@@ -5,11 +5,12 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
-import { CreateBookDto } from './dto/create-book.dto';
+import { BookDto, CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
 import { AuthorService } from '../author/author.service';
 import { BookAuthorService } from '../book-author/book-author.service';
+import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 
 @Injectable()
 export class BookService {
@@ -22,6 +23,8 @@ export class BookService {
         private readonly authorService: AuthorService,
         @Inject(forwardRef(() => BookAuthorService))
         private readonly bookAuthorService: BookAuthorService,
+        @Inject(forwardRef(() => AuthorDbLibService))
+        private readonly authorDbLibService: AuthorDbLibService,
     ) {}
 
     create(createBookDto: CreateBookDto) {
@@ -34,21 +37,22 @@ export class BookService {
         }
 
         try {
-            const newBook = {
+            const newBook: BookDto = {
                 id: this.generateId(),
-                ...createBookDto,
+                title: createBookDto.title,
+                description: createBookDto.description,
+                isbn: createBookDto.isbn,
             };
 
-            if (newBook.authors.length > 0) {
-                newBook.authors.forEach((author) => {
-                    this.authorService.createBookAuthorRelationship(
-                        newBook.id,
-                        author,
-                    );
-                });
+            this.bookDbLibService.createBook(newBook);
+
+            if (createBookDto.authors.length > 0) {
+                this.authorService.createBookAuthorRelationship(
+                    newBook.id,
+                    createBookDto.authors,
+                );
             }
 
-            this.bookDbLibService.createBook(newBook);
             return newBook;
         } catch (error) {
             this.logger.error(error);
@@ -56,18 +60,17 @@ export class BookService {
         }
     }
 
-    createBookAuthorRelationship(authorId: number, book: string) {
+    createBookAuthorRelationship(authorId: number, book: string[]) {
         try {
-            const createdBook: CreateBookDto = this.create({
-                title: book,
-                description: '',
-                isbn: '',
-                authors: [],
-            });
+            book.forEach((book) => {
+                const createdBook: BookDto = this.create({
+                    title: book,
+                    description: '',
+                    isbn: '',
+                    authors: [],
+                });
 
-            this.bookAuthorService.create({
-                bookId: createdBook.id,
-                authorId: authorId,
+                this.bookAuthorService.create(createdBook.id, authorId);
             });
         } catch (error) {
             this.logger.error(error);

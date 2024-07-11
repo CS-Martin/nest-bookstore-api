@@ -1,34 +1,38 @@
-import { CreateAuthorDto } from 'src/modules/author/dto/create-author.dto';
+import { AuthorDto } from 'src/modules/author/dto/create-author.dto';
 import { loadAuthors } from '../utils';
 
-export class AuthorDbLibService {
-    private AuthorsArray: CreateAuthorDto[] = loadAuthors();
+import { Logger } from '@nestjs/common';
 
-    createAuthor(createAuthorDto: CreateAuthorDto): void {
+export class AuthorDbLibService {
+    private logger = new Logger(AuthorDbLibService.name);
+    private AuthorsArray: AuthorDto[] = loadAuthors();
+
+    createAuthor(createAuthorDto: AuthorDto): void {
         this.AuthorsArray.push(createAuthorDto);
     }
 
-    updateAuthor(authorToUpdate: CreateAuthorDto): void {
+    updateAuthor(authorToUpdate: AuthorDto): void {
         const authorIndex = authorToUpdate.id;
 
         this.AuthorsArray[authorIndex - 1] = authorToUpdate;
     }
 
-    deleteAuthor(authorToDelete: CreateAuthorDto): void {
+    deleteAuthor(authorToDelete: AuthorDto): void {
         const authorIndex = authorToDelete.id;
 
         this.AuthorsArray.splice(authorIndex - 1, 1);
     }
 
-    getAllAuthors(): CreateAuthorDto[] {
+    getAllAuthors(): AuthorDto[] {
+        this.logger.log(`Getting all authors: ${this.AuthorsArray}`);
         return this.AuthorsArray;
     }
 
-    getAuthor(id: number): CreateAuthorDto | undefined {
+    getAuthor(id: number): AuthorDto | undefined {
         return this.AuthorsArray.find((author) => author.id === id);
     }
 
-    getAuthorByName(name: string): CreateAuthorDto | undefined {
+    getAuthorByName(name: string): AuthorDto | undefined {
         return this.AuthorsArray.find((author) => author.name === name);
     }
 

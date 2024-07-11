@@ -16,9 +16,7 @@ export class BookAuthorController {
     constructor(private readonly bookAuthorService: BookAuthorService) {}
 
     @Post()
-    create(@Body() createBookAuthorDto: CreateBookAuthorDto) {
-        return this.bookAuthorService.create(createBookAuthorDto);
-    }
+    create(@Body() createBookAuthorDto: CreateBookAuthorDto) {}
 
     @Get()
     findAll() {
