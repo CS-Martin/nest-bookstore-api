@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { DrawerClose, DrawerFooter } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -41,16 +42,6 @@ const AddBookForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="px-4 flex flex-col gap-3">
-      <div className="flex flex-col gap-2">
-        <Label>Book Title:</Label>
-        <Input
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            setIsDisabled(e.target.value.length >= 3);
-          }}
-        />
-      </div>
 
       <div className="flex flex-col gap-2">
         <Label>Book Title:</Label>
@@ -83,6 +74,8 @@ const AddBookForm = () => {
         />
       </div>
 
+
+
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <Label>Author/s:</Label>
@@ -90,39 +83,24 @@ const AddBookForm = () => {
         {authors.map((author, index = 1) => (
           <div className="flex gap-2">
             <Input
+              className="border-border"
               key={index}
               value={author}
               onChange={(e) => handleAddAuthor(index, e.target.value)}
             />
-            <Button
-              variant="destructive"
-              type="button"
-              onClick={() => handleRemoveAuthor(index)}
-            >
-              <X size={16} />
-            </Button>
+            <Button variant="destructive" type="button" onClick={() => handleRemoveAuthor(index)}><X size={16} /></Button>
           </div>
         ))}
 
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <Label>Author/s:</Label>
-          </div>
-          {authors.map((author, index = 1) => (
-            <div className="flex gap-2">
-              <Input
-                className="border-border"
-                key={index}
-                value={author}
-                onChange={(e) => handleAddAuthor(index, e.target.value)}
-              />
-              <Button variant="destructive" type="button" onClick={() => handleRemoveAuthor(index)}><X size={16} /></Button>
-            </div>
-          ))}
+        <Button variant="outline" type="button" className="border-border" onClick={addAuthorField}><Plus size={18} className="me-2" /> Add more author </Button>
+      </div>
 
-          <Button variant="outline" type="button" className="border-border" onClick={addAuthorField}><Plus size={18} className="me-2" /> Add more author </Button>
-        </div>
-    </form>
+      <Button type="submit" disabled={isDisabled}>Create Book</Button>
+      <DrawerClose className="">
+        <Button variant="outline" className="w-full">Cancel</Button>
+      </DrawerClose>
+
+    </form >
   );
 };
 
