@@ -15,9 +15,9 @@ datasource db {
 
 model Book {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
+  title       String    
   description String
-  isbn        String
+  isbn        String    @unique
   authors     String[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
