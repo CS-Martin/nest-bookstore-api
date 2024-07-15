@@ -1,4 +1,5 @@
 import { Book } from '@/types/books.types';
+import { NextResponse } from 'next/server';
 
 class BookService {
 	private API_BASE_URL: string;
@@ -40,6 +41,21 @@ class BookService {
 			console.error('Error:', error);
 
 			return [];
+		}
+	}
+
+	async getBookById(bookId: string): Promise<Book | null> {
+		try {
+			const response = await fetch(`${this.API_BASE_URL}/${bookId}`);
+
+			if (!response.ok) {
+				return null;
+			}
+
+			return response.json();
+		} catch (error) {
+			console.error('Error:', error);
+			return null;
 		}
 	}
 }
