@@ -5,4 +5,7 @@ export class BookEntity implements BookModel {
     title: string;
     description: string;
     isbn: string;
+    authors: string[];
+    createdAt: Date;
+    updatedAt: Date;
 }

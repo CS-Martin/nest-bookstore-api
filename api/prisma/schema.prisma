@@ -14,13 +14,11 @@ datasource db {
 }
 
 model Book {
-  id String @id @default(uuid()) @map("_id") @db.ObjectId
-  title String
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
   description String
-  isbn String
-}
-
-model Author {
-  id String @id @default(uuid()) @map("_id")
-  name String
+  isbn        String
+  authors     String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
