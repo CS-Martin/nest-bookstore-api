@@ -1,4 +1,4 @@
-import { AuthorDto } from 'src/modules/author/dto/create-author.dto';
+import { AuthorDto } from 'src/modules/author/dto/author.dto';
 import { loadAuthors } from '../utils';
 
 export class AuthorDbLibService {
@@ -9,13 +9,19 @@ export class AuthorDbLibService {
     }
 
     updateAuthor(authorToUpdate: AuthorDto): void {
-        const authorIndex = authorToUpdate.id;
+        const authorIndex = this.AuthorsArray.findIndex(
+            (author) => author.id === authorToUpdate.id,
+        );
 
-        this.AuthorsArray[authorIndex - 1] = authorToUpdate;
+        if (authorIndex !== -1) {
+            this.AuthorsArray[authorIndex] = authorToUpdate;
+        }
     }
 
     deleteAuthor(authorToDelete: AuthorDto): void {
-        const authorIndex = authorToDelete.id;
+        const authorIndex = this.AuthorsArray.findIndex(
+            (author) => author.id === authorToDelete.id,
+        );
 
         this.AuthorsArray.splice(authorIndex - 1, 1);
     }
@@ -24,8 +30,8 @@ export class AuthorDbLibService {
         return this.AuthorsArray;
     }
 
-    getAuthor(id: number): AuthorDto | undefined {
-        return this.AuthorsArray[id - 1];
+    getAuthor(id: string): AuthorDto | undefined {
+        return this.AuthorsArray.find((author) => author.id === id);
     }
 
     getAuthorByName(name: string): AuthorDto | undefined {

@@ -6,11 +6,15 @@ import {
     NotFoundException,
     forwardRef,
 } from '@nestjs/common';
-import { BookDto, CreateBookDto } from './dto/create-book.dto';
+import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookDbLibService } from 'src/lib/db/book-db-lib.service';
 import { AuthorService } from '../author/author.service';
 import { BookAuthorService } from '../book-author/book-author.service';
+import { BookPrismaLibService } from 'src/lib/prisma/book-prisma-lib.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { BookDto } from './dto/book.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class BookService {
@@ -23,6 +27,10 @@ export class BookService {
         private readonly authorService: AuthorService,
         @Inject(forwardRef(() => BookAuthorService))
         private readonly bookAuthorService: BookAuthorService,
+        @Inject(forwardRef(() => BookPrismaLibService))
+        private readonly bookPrismaLibService: BookPrismaLibService,
+        @Inject(forwardRef(() => PrismaService))
+        private readonly prismaService: PrismaService,
     ) {}
 
     create(createBookDto: CreateBookDto) {
@@ -45,7 +53,11 @@ export class BookService {
             };
 
             this.logger.log(`Creating book ${newBook.title}`);
+            // For array
             this.bookDbLibService.createBook(newBook);
+
+            // For Prisma
+            this.bookPrismaLibService.createBook(createBookDto);
             this.logger.log(`Book ${newBook.title} successfully created`);
 
             if (createBookDto.authors.length > 0) {
@@ -71,7 +83,7 @@ export class BookService {
         }
     }
 
-    createBookAuthorRelationship(authorId: number, book: string[]) {
+    createBookAuthorRelationship(authorId: string, book: string[]) {
         try {
             book.forEach((book) => {
                 const createdBook = this.create({
@@ -95,7 +107,7 @@ export class BookService {
         }
     }
 
-    update(id: number, updateBookDto: UpdateBookDto) {
+    update(id: string, updateBookDto: UpdateBookDto) {
         const existingBook = this.findOne(id);
 
         if (!existingBook) {
@@ -127,7 +139,7 @@ export class BookService {
         }
     }
 
-    remove(id: number) {
+    remove(id: string) {
         const bookToDelete = this.findOne(id);
 
         if (!bookToDelete) {
@@ -161,7 +173,7 @@ export class BookService {
         return this.bookDbLibService.getAllBooks();
     }
 
-    findOne(id: number) {
+    findOne(id: string) {
         const book = this.bookDbLibService.getBook(id);
 
         if (!book) {
@@ -171,8 +183,7 @@ export class BookService {
         return book;
     }
 
-    private generateId(): number {
-        const booksArrayLength = this.bookDbLibService.getBooksArrayLength();
-        return booksArrayLength > 0 ? booksArrayLength + 1 : 0;
+    private generateId(): string {
+        return uuidv4();
     }
 }

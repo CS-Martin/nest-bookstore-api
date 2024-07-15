@@ -7,7 +7,6 @@ import {
     Param,
     Delete,
     ValidationPipe,
-    ParseIntPipe,
     UseFilters,
 } from '@nestjs/common';
 import { BookService } from './book.service';
@@ -21,7 +20,7 @@ export class BookController {
     constructor(private readonly bookService: BookService) {}
 
     @Post()
-    create(@Body(new ValidationPipe()) createBookDto: CreateBookDto) {
+    create(@Body() createBookDto: CreateBookDto) {
         return this.bookService.create(createBookDto);
     }
 
@@ -31,20 +30,20 @@ export class BookController {
     }
 
     @Get(':id')
-    findOne(@Param('id', new ParseIntPipe()) id: number) {
+    findOne(@Param('id') id: string) {
         return this.bookService.findOne(id);
     }
 
     @Patch(':id')
     update(
-        @Param('id', new ParseIntPipe()) id: number,
+        @Param('id') id: string,
         @Body(new ValidationPipe()) updateBookDto: UpdateBookDto,
     ) {
         return this.bookService.update(id, updateBookDto);
     }
 
     @Delete(':id')
-    remove(@Param('id', new ParseIntPipe()) id: number) {
+    remove(@Param('id') id: string) {
         return this.bookService.remove(id);
     }
 }

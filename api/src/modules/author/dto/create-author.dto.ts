@@ -1,7 +1,8 @@
 import { OmitType } from '@nestjs/mapped-types';
 import { IsArray, IsOptional, IsString, MinLength } from 'class-validator';
+import { AuthorEntity } from '../entities/author.entity';
 
-export class CreateAuthorDto {
+export class CreateAuthorDto implements Omit<AuthorEntity, 'id'> {
     @IsString()
     @MinLength(1)
     name: string;
@@ -13,6 +14,4 @@ export class CreateAuthorDto {
     books?: string[];
 }
 
-export class AuthorDto extends OmitType(CreateAuthorDto, ['books'] as const) {
-    id: number;
-}
+export class AuthorPrismaDto extends OmitType(AuthorEntity, ['id'] as const) {}

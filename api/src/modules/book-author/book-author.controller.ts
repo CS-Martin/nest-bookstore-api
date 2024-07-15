@@ -12,7 +12,7 @@ export class BookAuthorController {
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
+    remove(@Param('id') id: string) {
         return this.bookAuthorService.removeBook(id);
     }
 }

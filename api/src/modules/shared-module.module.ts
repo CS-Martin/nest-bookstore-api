@@ -8,6 +8,9 @@ import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 import { BookAuthorModule } from './book-author/book-author.module';
 import { BookAuthorService } from './book-author/book-author.service';
 import { BookAuthorDbLibService } from 'src/lib/db/book-author-db-lib.service';
+import { BookPrismaLibService } from 'src/lib/prisma/book-prisma-lib.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthorPrismaLibService } from 'src/lib/prisma/author-prisma-lib.service';
 
 @Module({
     imports: [
@@ -18,18 +21,24 @@ import { BookAuthorDbLibService } from 'src/lib/db/book-author-db-lib.service';
     providers: [
         BookService,
         BookDbLibService,
-        AuthorService,
-        AuthorDbLibService,
         BookAuthorService,
         BookAuthorDbLibService,
+        BookPrismaLibService,
+
+        AuthorService,
+        AuthorDbLibService,
+        AuthorPrismaLibService,
+
+        PrismaService,
     ],
     exports: [
         BookService,
         BookDbLibService,
-        AuthorService,
-        AuthorDbLibService,
         BookAuthorService,
         BookAuthorDbLibService,
+
+        AuthorService,
+        AuthorDbLibService,
     ],
 })
 export class SharedModule {}

@@ -12,13 +12,13 @@ export class BookAuthorDbLibService {
         return this.BookAuthorArray;
     }
 
-    deleteBook(bookId: number) {
+    deleteBook(bookId: string) {
         this.BookAuthorArray = this.BookAuthorArray.filter(
             (book) => book.book_id !== bookId,
         );
     }
 
-    deleteAuthor(authorId: number) {
+    deleteAuthor(authorId: string) {
         this.BookAuthorArray = this.BookAuthorArray.filter(
             (author) => author.author_id !== authorId,
         );

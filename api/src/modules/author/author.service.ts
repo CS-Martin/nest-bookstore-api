@@ -12,6 +12,8 @@ import { UpdateAuthorDto } from './dto/update-author.dto';
 import { AuthorDbLibService } from 'src/lib/db/author-db-lib.service';
 import { BookAuthorService } from '../book-author/book-author.service';
 import { BookService } from '../book/book.service';
+import { v4 as uuidv4 } from 'uuid';
+import { AuthorPrismaLibService } from 'src/lib/prisma/author-prisma-lib.service';
 
 @Injectable()
 export class AuthorService {
@@ -24,6 +26,8 @@ export class AuthorService {
         private bookService: BookService,
         @Inject(forwardRef(() => BookAuthorService))
         private bookAuthorService: BookAuthorService,
+        @Inject(forwardRef(() => AuthorPrismaLibService))
+        private authorPrismaLibService: AuthorPrismaLibService,
     ) {}
 
     create(createAuthorDto: CreateAuthorDto) {
@@ -44,7 +48,12 @@ export class AuthorService {
             };
 
             this.logger.log(`Creating author ${newAuthor.name}`);
+            // For array
             this.authorDbLibService.createAuthor(newAuthor);
+
+            // For Prisma
+            this.authorPrismaLibService.createAuthor(createAuthorDto);
+
             this.logger.log(`Author ${newAuthor.name} created`);
 
             if (createAuthorDto.books) {
@@ -64,12 +73,11 @@ export class AuthorService {
         }
     }
 
-    createBookAuthorRelationship(bookId: number, newAuthor: string[]) {
+    createBookAuthorRelationship(bookId: string, newAuthor: string[]) {
         try {
             newAuthor.forEach((author) => {
                 const createdAuthor = this.create({
                     name: author,
-                    books: [],
                 });
 
                 this.logger.log(`Creating book-author relationship`);
@@ -86,7 +94,7 @@ export class AuthorService {
         }
     }
 
-    update(id: number, updateAuthorDto: UpdateAuthorDto) {
+    update(id: string, updateAuthorDto: UpdateAuthorDto) {
         const existingAuthor = this.findOne(id);
 
         if (!existingAuthor) {
@@ -115,7 +123,7 @@ export class AuthorService {
         }
     }
 
-    remove(id: number) {
+    remove(id: string) {
         const existingAuthor = this.findOne(id);
 
         if (!existingAuthor) {
@@ -127,7 +135,7 @@ export class AuthorService {
 
             // If an author is deleted, also delete the book-author relationship
             this.logger.log(`Deleting book-author relationship`);
-            this.bookAuthorService.removeAuthor(existingAuthor.id);
+            this.bookAuthorService.removeBook(existingAuthor.id);
             this.logger.log(
                 `Author ${existingAuthor.name} successfully deleted`,
             );
@@ -146,7 +154,7 @@ export class AuthorService {
         return this.authorDbLibService.getAllAuthors();
     }
 
-    findOne(id: number) {
+    findOne(id: string) {
         const existingAuthor = this.authorDbLibService.getAuthor(id);
 
         if (!existingAuthor) {
@@ -156,9 +164,7 @@ export class AuthorService {
         return existingAuthor;
     }
 
-    private generateAuthorId(): number {
-        const authorsArrayLength =
-            this.authorDbLibService.getAuthorsArrayLength();
-        return authorsArrayLength > 0 ? authorsArrayLength + 1 : 1;
+    private generateAuthorId(): string {
+        return uuidv4();
     }
 }

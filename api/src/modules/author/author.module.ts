@@ -2,21 +2,13 @@ import { Module, forwardRef } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { AuthorController } from './author.controller';
 import { SharedModule } from '../shared-module.module';
+import { AuthorPrismaLibService } from 'src/lib/prisma/author-prisma-lib.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
     imports: [forwardRef(() => SharedModule)],
     controllers: [AuthorController],
-    providers: [AuthorService],
+    providers: [AuthorService, PrismaService, AuthorPrismaLibService],
     exports: [AuthorService],
-
-    // imports: [forwardRef(() => BookModule)],
-    // controllers: [AuthorController],
-    // providers: [
-    //     AuthorService,
-    //     AuthorDbLibService,
-    //     BookAuthorService,
-    //     BookService,
-    //     BookDbLibService,
-    // ],
 })
 export class AuthorModule {}

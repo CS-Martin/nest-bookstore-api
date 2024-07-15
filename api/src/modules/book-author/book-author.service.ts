@@ -23,7 +23,7 @@ export class BookAuthorService {
         private authorService: AuthorService,
     ) {}
 
-    create(bookId: number, authorId: number) {
+    create(bookId: string, authorId: string) {
         // Verify if the book exists
         const book = this.bookService.findOne(bookId);
 
@@ -87,7 +87,7 @@ export class BookAuthorService {
             this.bookAuthorDbLibService.getAllBookAuthor();
 
         // Map to store books with their authors
-        const booksMap = new Map<number, any>();
+        const booksMap = new Map<string, any>();
 
         bookAuthorRelationships.forEach(async (relationship) => {
             const book = this.bookService.findOne(relationship.book_id);
@@ -103,11 +103,11 @@ export class BookAuthorService {
         return Array.from(booksMap.values());
     }
 
-    removeBook(bookId: number) {
+    removeBook(bookId: string) {
         this.bookAuthorDbLibService.deleteBook(bookId);
     }
 
-    removeAuthor(authorId: number) {
+    aremoveAuthor(authorId: string) {
         this.bookAuthorDbLibService.deleteAuthor(authorId);
     }
 

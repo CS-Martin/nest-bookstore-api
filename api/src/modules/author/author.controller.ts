@@ -7,7 +7,6 @@ import {
     Param,
     Delete,
     ValidationPipe,
-    ParseIntPipe,
     UseFilters,
 } from '@nestjs/common';
 import { AuthorService } from './author.service';
@@ -31,20 +30,20 @@ export class AuthorController {
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.authorService.findOne(+id);
+    findOne(@Param('id') id: string) {
+        return this.authorService.findOne(id);
     }
 
     @Patch(':id')
     update(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id') id: string,
         @Body(new ValidationPipe()) updateAuthorDto: UpdateAuthorDto,
     ) {
-        return this.authorService.update(+id, updateAuthorDto);
+        return this.authorService.update(id, updateAuthorDto);
     }
 
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
-        return this.authorService.remove(+id);
+    remove(@Param('id') id: string) {
+        return this.authorService.remove(id);
     }
 }
